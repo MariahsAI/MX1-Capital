@@ -13,6 +13,8 @@
             --accent: #a855f7;
             --accent-bright: #c084fc;
             --accent-dim: #a855f733;
+            --cyan: #00e5cc;
+            --cyan-dim: #00e5cc33;
             --text: #ffffff;
             --text-dim: #888888;
             --gold: #c9a962;
@@ -315,7 +317,7 @@
             right: 0;
             font-size: 0.65rem;
             letter-spacing: 0.3em;
-            color: var(--accent);
+            color: var(--cyan);
             display: flex;
             align-items: center;
             gap: 0.5rem;
@@ -328,10 +330,10 @@
             right: 5.5rem;
             width: 6px;
             height: 6px;
-            background: var(--accent);
+            background: var(--cyan);
             border-radius: 50%;
             animation: pulse 1.5s ease infinite;
-            box-shadow: 0 0 10px var(--accent);
+            box-shadow: 0 0 10px var(--cyan);
         }
 
         .stat-item {
@@ -349,8 +351,8 @@
             transform: translateY(-50%);
             width: 10px;
             height: 10px;
-            background: var(--accent);
-            box-shadow: 0 0 20px var(--accent);
+            background: var(--cyan);
+            box-shadow: 0 0 20px var(--cyan);
         }
 
         .stat-value {
@@ -510,7 +512,7 @@
 
         .chart-path {
             fill: none;
-            stroke: var(--accent);
+            stroke: var(--cyan);
             stroke-width: 2;
             stroke-dasharray: 1000;
             stroke-dashoffset: 1000;
@@ -837,7 +839,7 @@
                 <span class="outline">GENERATION</span>
             </h1>
             <p class="hero-desc">
-                Deploying proprietary algorithms and machine learning infrastructure to extract consistent returns from global markets.
+                AI-driven firm combining quantitative trading, machine learning, and multi-asset strategies to deliver superior risk-adjusted returns.
             </p>
             <div class="cta-group">
                 <a href="#contact" class="btn-primary">Request Access</a>
@@ -933,8 +935,8 @@
                     <svg class="chart-svg" viewBox="0 0 400 200" preserveAspectRatio="none">
                         <defs>
                             <linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                                <stop offset="0%" style="stop-color:#a855f7;stop-opacity:0.3"/>
-                                <stop offset="100%" style="stop-color:#a855f7;stop-opacity:0"/>
+                                <stop offset="0%" style="stop-color:#00e5cc;stop-opacity:0.3"/>
+                                <stop offset="100%" style="stop-color:#00e5cc;stop-opacity:0"/>
                             </linearGradient>
                         </defs>
                         <path class="chart-fill" d="M0,180 L50,160 L100,140 L150,120 L200,90 L250,70 L300,40 L350,30 L400,10 L400,200 L0,200 Z"/>
