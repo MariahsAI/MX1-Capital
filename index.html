@@ -989,7 +989,7 @@
             background-image: url('about-bg.jpg');
             background-size: cover;
             background-position: center;
-            filter: brightness(0.35);
+            filter: brightness(0.4);
             z-index: 0;
         }
 
@@ -1032,10 +1032,29 @@
         .about-text {
             font-size: 1.3rem;
             font-weight: 400;
-            color: rgba(255,255,255,0.85);
+            color: rgba(255,255,255,0.95);
             line-height: 1.9;
             max-width: 800px;
-            margin: 0 auto;
+            margin: 0 auto 2.5rem auto;
+        }
+
+        .about-cta {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+
+        .about-cta:hover {
+            background: var(--accent);
+            color: var(--black);
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.3);
         }
 
         @media (max-width: 768px) {
@@ -1411,6 +1430,7 @@
             <p class="about-label">About MX1</p>
             <h2 class="about-title">BUILDING THE FUTURE OF QUANTITATIVE INVESTING</h2>
             <p class="about-text">MX1 Holdings is a multi-strategy investment firm leveraging AI, quantitative research, and disciplined risk management to generate consistent alpha across digital and traditional asset markets.</p>
+            <a href="#strategy" class="about-cta">View Our Strategy</a>
         </div>
     </section>
 
