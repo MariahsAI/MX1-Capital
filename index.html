@@ -289,6 +289,190 @@
             animation-delay: 1.1s;
         }
 
+        .invite-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+            padding: 0.6rem 1.2rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 50px;
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--accent);
+            opacity: 0;
+            animation: fadeSlideUp 1s ease forwards;
+            animation-delay: 1.3s;
+        }
+
+        .invite-badge svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* Platform Section */
+        .platform {
+            position: relative;
+            padding: 8rem 4rem;
+            overflow: hidden;
+            background: var(--surface);
+        }
+
+        .platform-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .platform-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .platform-label {
+            font-size: 0.75rem;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--cyan);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .platform-label::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--cyan);
+            border-radius: 50%;
+            animation: pulse 2s ease infinite;
+        }
+
+        .platform-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3.5rem;
+            letter-spacing: 0.05em;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+        }
+
+        .platform-subtitle {
+            font-size: 1.3rem;
+            color: var(--text);
+            margin-bottom: 1rem;
+            font-weight: 400;
+        }
+
+        .platform-desc {
+            font-size: 1.1rem;
+            font-weight: 300;
+            color: var(--text-dim);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .platform-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .platform-feature {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            background: rgba(0, 229, 204, 0.05);
+            border: 1px solid rgba(0, 229, 204, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+
+        .platform-feature svg {
+            color: var(--cyan);
+            width: 16px;
+            height: 16px;
+        }
+
+        .btn-cyan {
+            background: var(--cyan);
+            color: var(--black);
+            padding: 1.2rem 3rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .btn-cyan:hover {
+            box-shadow: 0 0 40px rgba(0, 229, 204, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .platform-image {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .platform-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .platform-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0, 229, 204, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @media (max-width: 1024px) {
+            .platform-container {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+            
+            .platform-image {
+                order: -1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .platform {
+                padding: 5rem 1.5rem;
+            }
+            
+            .platform-title {
+                font-size: 2.5rem;
+            }
+            
+            .invite-badge {
+                margin-top: 1.5rem;
+            }
+        }
+
         .btn-primary {
             background: var(--accent);
             color: var(--black);
@@ -1110,6 +1294,7 @@
         <div class="logo">MX<span class="logo-1">1</span></div>
         <ul class="nav-links">
             <li><a href="#about">About</a></li>
+            <li><a href="#platform">Platform</a></li>
             <li><a href="#strategy">Strategy</a></li>
             <li><a href="#performance">Performance</a></li>
             <li><a href="#team">Team</a></li>
@@ -1138,6 +1323,13 @@
                         <path d="M5 12h14M12 5l7 7-7 7"/>
                     </svg>
                 </a>
+            </div>
+            <div class="invite-badge">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+                Private Platform • Invite Only
             </div>
         </div>
         <div class="floating-stats">
@@ -1180,6 +1372,43 @@
             <p class="about-label">About MX1</p>
             <h2 class="about-title">BUILDING THE FUTURE OF QUANTITATIVE INVESTING</h2>
             <p class="about-text">MX1 Holdings is a multi-strategy investment firm leveraging AI, quantitative research, and disciplined risk management to generate consistent alpha across digital and traditional asset markets.</p>
+        </div>
+    </section>
+
+    <!-- Platform Section -->
+    <section id="platform" class="platform">
+        <div class="platform-container">
+            <div class="platform-content">
+                <p class="platform-label">Exclusive Access</p>
+                <h2 class="platform-title">FUSION AUTONOMY</h2>
+                <p class="platform-subtitle">AI-Powered Trading Predictions</p>
+                <p class="platform-desc">Our proprietary crypto prediction engine combines machine learning models with real-time market analysis to deliver actionable trading signals. Available exclusively to qualified investors.</p>
+                <div class="platform-features">
+                    <div class="platform-feature">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                        </svg>
+                        Real-time Signals
+                    </div>
+                    <div class="platform-feature">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                        </svg>
+                        Multi-Asset Coverage
+                    </div>
+                    <div class="platform-feature">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                        </svg>
+                        Invite Only
+                    </div>
+                </div>
+                <a href="#contact" class="btn-cyan">Request Invitation</a>
+            </div>
+            <div class="platform-image">
+                <img src="platform-ui.png" alt="Fusion Autonomy Platform">
+            </div>
         </div>
     </section>
 
