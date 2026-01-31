@@ -434,6 +434,19 @@
             width: 100%;
             height: auto;
             display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+
+        .platform-image img:first-child {
+            position: relative;
+        }
+
+        .platform-image img.active {
+            opacity: 1;
         }
 
         .platform-image::before {
@@ -446,6 +459,27 @@
             background: linear-gradient(135deg, rgba(0, 229, 204, 0.1) 0%, transparent 50%);
             pointer-events: none;
             z-index: 1;
+        }
+
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .carousel-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .carousel-dot.active {
+            background: var(--cyan);
+            box-shadow: 0 0 10px var(--cyan);
         }
 
         @media (max-width: 1024px) {
@@ -1407,7 +1441,12 @@
                 <a href="#contact" class="btn-cyan">Request Invitation</a>
             </div>
             <div class="platform-image">
-                <img src="platform-ui.png" alt="Fusion Autonomy Platform">
+                <img src="platform-ui-1.png" alt="Fusion Autonomy Dashboard" class="active">
+                <img src="platform-ui-2.png" alt="Fusion Autonomy Agents">
+            </div>
+            <div class="carousel-dots">
+                <div class="carousel-dot active" data-index="0"></div>
+                <div class="carousel-dot" data-index="1"></div>
             </div>
         </div>
     </section>
@@ -1595,4 +1634,38 @@
         // Parallax effect on scroll
         window.addEventListener('scroll', () => {
             const scrolled = window.pageYOffset;
-            const heroContent = document.querySelector('.hero-content'
+            const heroContent = document.querySelector('.hero-content');
+            if (heroContent) {
+                heroContent.style.transform = `translateY(${scrolled * 0.3}px)`;
+                heroContent.style.opacity = 1 - (scrolled * 0.002);
+            }
+        });
+
+        // Platform carousel
+        const platformImages = document.querySelectorAll('.platform-image img');
+        const carouselDots = document.querySelectorAll('.carousel-dot');
+        let currentSlide = 0;
+
+        function showSlide(index) {
+            platformImages.forEach((img, i) => {
+                img.classList.toggle('active', i === index);
+            });
+            carouselDots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+            currentSlide = index;
+        }
+
+        // Auto-rotate every 4 seconds
+        setInterval(() => {
+            const nextSlide = (currentSlide + 1) % platformImages.length;
+            showSlide(nextSlide);
+        }, 4000);
+
+        // Click on dots to change slide
+        carouselDots.forEach((dot, index) => {
+            dot.addEventListener('click', () => showSlide(index));
+        });
+    </script>
+</body>
+</html>
