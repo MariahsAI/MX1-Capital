@@ -49,7 +49,6 @@
             overflow: hidden;
         }
 
-        /* The 3D world - NO transition, follows scroll directly */
         .world {
             position: absolute;
             width: 100%;
@@ -58,7 +57,6 @@
             will-change: transform;
         }
 
-        /* Each panel positioned in 3D space */
         .panel {
             position: absolute;
             width: 100vw;
@@ -80,13 +78,20 @@
             position: relative;
         }
 
-        /* Panel positions in 3D space - snake path */
+        /* 
+        PATH LAYOUT:
+        [0:Hero] → [1:About] → [2:Platform]
+                                    ↓
+                              [3:Strategy] → [4:Perf] → [5:Team]
+                                                            ↓
+                                                        [6:Contact]
+        */
         .panel[data-index="0"] { transform: translate3d(0, 0, 0); }
         .panel[data-index="1"] { transform: translate3d(100vw, 0, 0); }
         .panel[data-index="2"] { transform: translate3d(200vw, 0, 0); }
         .panel[data-index="3"] { transform: translate3d(200vw, 100vh, 0); }
-        .panel[data-index="4"] { transform: translate3d(200vw, 200vh, 0); }
-        .panel[data-index="5"] { transform: translate3d(300vw, 200vh, 0); }
+        .panel[data-index="4"] { transform: translate3d(300vw, 100vh, 0); }
+        .panel[data-index="5"] { transform: translate3d(400vw, 100vh, 0); }
         .panel[data-index="6"] { transform: translate3d(400vw, 200vh, 0); }
 
         /* Navigation */
@@ -100,6 +105,7 @@
             justify-content: space-between;
             align-items: center;
             z-index: 1000;
+            background: linear-gradient(to bottom, rgba(5,5,8,0.9), transparent);
         }
 
         nav::before {
@@ -108,8 +114,9 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 3px;
+            height: 4px;
             background: var(--accent);
+            box-shadow: 0 0 20px var(--accent-dim);
         }
 
         .logo {
@@ -119,9 +126,7 @@
             color: var(--text);
         }
 
-        .logo .logo-1 {
-            color: var(--accent);
-        }
+        .logo .logo-1 { color: var(--accent); }
 
         .nav-links {
             display: flex;
@@ -132,20 +137,17 @@
         .nav-links a {
             color: var(--text-dim);
             text-decoration: none;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             font-weight: 300;
             letter-spacing: 0.2em;
             text-transform: uppercase;
             transition: all 0.3s ease;
             cursor: pointer;
-            position: relative;
         }
 
         .nav-links a::after {
             content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
+            display: block;
             width: 0;
             height: 1px;
             background: var(--accent);
@@ -153,21 +155,17 @@
         }
 
         .nav-links a:hover::after,
-        .nav-links a.active::after {
-            width: 100%;
-        }
+        .nav-links a.active::after { width: 100%; }
 
         .nav-links a:hover,
-        .nav-links a.active {
-            color: var(--text);
-        }
+        .nav-links a.active { color: var(--text); }
 
         /* Progress bar */
         .progress-bar {
             position: fixed;
             top: 0;
             left: 0;
-            height: 3px;
+            height: 4px;
             background: var(--cyan);
             z-index: 1001;
             transform-origin: left;
@@ -175,7 +173,24 @@
             transform: scaleX(0);
         }
 
-        /* Direction indicator */
+        /* Section counter */
+        .section-counter {
+            position: fixed;
+            bottom: 3rem;
+            right: 4rem;
+            z-index: 1000;
+            font-family: 'Bebas Neue', sans-serif;
+            letter-spacing: 0.2em;
+            color: var(--text-dim);
+        }
+
+        .section-counter .current {
+            color: var(--accent);
+            font-size: 2.5rem;
+            line-height: 1;
+        }
+
+        /* Direction hint */
         .direction-hint {
             position: fixed;
             bottom: 3rem;
@@ -210,52 +225,87 @@
 
         .direction-hint[data-direction="right"] .arrow { transform: rotate(0deg); }
         .direction-hint[data-direction="down"] .arrow { transform: rotate(90deg); }
+        .direction-hint[data-direction="left"] .arrow { transform: rotate(180deg); }
 
-        /* Section counter */
-        .section-counter {
-            position: fixed;
-            bottom: 3rem;
-            right: 4rem;
-            z-index: 1000;
+        /* ============================================
+           MARQUEE BANNER
+           ============================================ */
+        .marquee {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            overflow: hidden;
+            padding: 1.25rem 0;
+            background: linear-gradient(90deg, #7c3aed, #a855f7, #c084fc, #a855f7, #7c3aed);
+            z-index: 20;
+        }
+
+        .marquee-content {
+            display: flex;
+            animation: marqueeScroll 25s linear infinite;
+            white-space: nowrap;
+        }
+
+        .marquee-item {
             font-family: 'Bebas Neue', sans-serif;
-            letter-spacing: 0.2em;
-            color: var(--text-dim);
-        }
-
-        .section-counter .current {
-            color: var(--accent);
-            font-size: 2.5rem;
-            line-height: 1;
-        }
-
-        .section-counter .total {
             font-size: 1rem;
+            letter-spacing: 0.3em;
+            color: var(--black);
+            padding: 0 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+        }
+
+        .marquee-item::before {
+            content: '●';
+            font-size: 0.5rem;
+        }
+
+        @keyframes marqueeScroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
         }
 
         /* ============================================
-           PANEL STYLES
+           HERO SECTION
            ============================================ */
-
         .panel-hero { background: var(--deep); }
+        
         .panel-hero .panel-content {
             justify-content: flex-start;
             padding-left: 8%;
+            padding-bottom: 5rem;
         }
 
         .hero-bg {
             position: absolute;
             top: 0;
             right: 0;
-            width: 60%;
+            width: 100%;
             height: 100%;
-            background: radial-gradient(ellipse at 70% 50%, rgba(168,85,247,0.12) 0%, transparent 60%);
-            pointer-events: none;
+            background-image: url('hero-bg.jpg');
+            background-size: cover;
+            background-position: center right;
+            opacity: 0.45;
+            z-index: 0;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--deep) 35%, transparent 70%);
+            z-index: 1;
         }
 
         .hero-content {
             position: relative;
             z-index: 10;
-            max-width: 750px;
+            max-width: 800px;
         }
 
         .hero-tag {
@@ -263,15 +313,15 @@
             letter-spacing: 0.5em;
             text-transform: uppercase;
             color: var(--accent);
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
         }
 
         .hero-title {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: clamp(3.5rem, 9vw, 8rem);
+            font-size: clamp(4rem, 10vw, 9rem);
             line-height: 0.9;
             letter-spacing: -0.02em;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
         }
 
         .hero-title .outline {
@@ -285,12 +335,12 @@
         }
 
         .hero-desc {
-            font-size: 1.05rem;
+            font-size: 1.1rem;
             font-weight: 300;
             color: var(--text-dim);
-            max-width: 420px;
+            max-width: 450px;
             line-height: 1.8;
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
         }
 
         .cta-group {
@@ -302,8 +352,8 @@
         .btn-primary {
             background: var(--accent);
             color: var(--black);
-            padding: 1rem 2.5rem;
-            font-size: 0.8rem;
+            padding: 1.2rem 3rem;
+            font-size: 0.85rem;
             font-weight: 600;
             letter-spacing: 0.15em;
             text-transform: uppercase;
@@ -321,7 +371,7 @@
         .btn-secondary {
             color: var(--text-dim);
             text-decoration: none;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             letter-spacing: 0.15em;
             text-transform: uppercase;
             display: flex;
@@ -333,6 +383,26 @@
 
         .btn-secondary:hover { color: var(--text); }
 
+        .invite-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+            padding: 0.6rem 1.2rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 50px;
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--accent);
+        }
+
+        .invite-badge svg {
+            width: 14px;
+            height: 14px;
+        }
+
         .floating-stats {
             position: absolute;
             right: 8%;
@@ -340,7 +410,31 @@
             transform: translateY(-50%);
             display: flex;
             flex-direction: column;
-            gap: 2rem;
+            gap: 2.5rem;
+            z-index: 10;
+        }
+
+        .floating-stats::before {
+            content: 'LIVE DATA';
+            position: absolute;
+            top: -2.5rem;
+            right: 0;
+            font-size: 0.65rem;
+            letter-spacing: 0.3em;
+            color: var(--cyan);
+        }
+
+        .floating-stats::after {
+            content: '';
+            position: absolute;
+            top: -2rem;
+            right: 5rem;
+            width: 6px;
+            height: 6px;
+            background: var(--cyan);
+            border-radius: 50%;
+            animation: pulse 1.5s ease infinite;
+            box-shadow: 0 0 10px var(--cyan);
         }
 
         .stat-item {
@@ -349,9 +443,21 @@
             border-right: 2px solid var(--accent);
         }
 
+        .stat-item::after {
+            content: '';
+            position: absolute;
+            right: -6px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 10px;
+            height: 10px;
+            background: var(--cyan);
+            box-shadow: 0 0 15px var(--cyan);
+        }
+
         .stat-value {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 3rem;
+            font-size: 3.5rem;
             color: var(--text);
             line-height: 1;
         }
@@ -359,24 +465,64 @@
         .stat-value .plus { color: var(--accent); }
 
         .stat-label {
-            font-size: 0.65rem;
-            letter-spacing: 0.2em;
+            font-size: 0.7rem;
+            letter-spacing: 0.25em;
             text-transform: uppercase;
-            color: rgba(255,255,255,0.5);
+            color: rgba(255,255,255,0.6);
             margin-top: 0.3rem;
         }
 
-        /* About */
-        .panel-about { background: linear-gradient(135deg, #0c0814 0%, #140a1c 100%); }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* ============================================
+           ABOUT SECTION
+           ============================================ */
+        .panel-about {
+            background: var(--deep);
+        }
+
+        .about-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('about-bg.jpg');
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.4);
+            z-index: 0;
+        }
+
+        .about-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, var(--deep) 0%, transparent 30%, transparent 70%, var(--deep) 100%);
+            z-index: 1;
+        }
+
         .panel-about .panel-content {
             flex-direction: column;
             text-align: center;
         }
 
-        .about-content { max-width: 900px; }
+        .about-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1000px;
+            padding: 4rem;
+            background: radial-gradient(ellipse at center, rgba(5,5,8,0.85) 0%, rgba(5,5,8,0.4) 60%, transparent 80%);
+            border-radius: 20px;
+        }
 
         .about-label {
-            font-size: 0.8rem;
+            font-size: 1rem;
             letter-spacing: 0.4em;
             text-transform: uppercase;
             color: var(--accent);
@@ -387,21 +533,200 @@
             font-family: 'Bebas Neue', sans-serif;
             font-size: clamp(2.5rem, 6vw, 5rem);
             letter-spacing: 0.05em;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
             line-height: 1.1;
         }
 
         .about-text {
-            font-size: 1.15rem;
+            font-size: 1.3rem;
             font-weight: 300;
-            color: rgba(255,255,255,0.7);
+            color: rgba(255,255,255,0.85);
             line-height: 1.9;
-            max-width: 700px;
+            max-width: 800px;
             margin: 0 auto;
         }
 
-        /* Strategy */
-        .panel-strategy { background: var(--surface); }
+        /* ============================================
+           PLATFORM SECTION (Fusion Autonomy)
+           ============================================ */
+        .panel-platform { 
+            background: var(--surface);
+        }
+        
+        .panel-platform .panel-content { 
+            gap: 4rem;
+            padding: 6rem;
+        }
+
+        .platform-content {
+            flex: 0 0 420px;
+        }
+
+        .platform-label {
+            font-size: 0.75rem;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--cyan);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .platform-label::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--cyan);
+            border-radius: 50%;
+            animation: pulse 2s ease infinite;
+        }
+
+        .platform-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            letter-spacing: 0.02em;
+            margin-bottom: 0.5rem;
+            line-height: 1;
+        }
+
+        .platform-subtitle {
+            font-size: 1.2rem;
+            color: var(--text);
+            margin-bottom: 1.5rem;
+            font-weight: 400;
+        }
+
+        .platform-desc {
+            font-size: 1rem;
+            font-weight: 300;
+            color: var(--text-dim);
+            line-height: 1.9;
+            margin-bottom: 2rem;
+        }
+
+        .platform-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+
+        .platform-feature {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            background: rgba(0, 229, 204, 0.05);
+            border: 1px solid rgba(0, 229, 204, 0.25);
+            padding: 0.6rem 1rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .platform-feature:hover {
+            background: rgba(0, 229, 204, 0.1);
+            border-color: var(--cyan);
+        }
+
+        .platform-feature svg {
+            color: var(--cyan);
+            width: 16px;
+            height: 16px;
+        }
+
+        .btn-cyan {
+            background: var(--cyan);
+            color: var(--black);
+            padding: 1.2rem 3rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .btn-cyan:hover {
+            box-shadow: 0 0 40px rgba(0, 229, 204, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .platform-visual { 
+            flex: 1;
+        }
+
+        .platform-mockup {
+            width: 100%;
+            max-width: 800px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .platform-mockup img {
+            width: 100%;
+            height: auto;
+            display: block;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .platform-mockup img:first-child {
+            position: relative;
+        }
+
+        .platform-mockup img.active {
+            opacity: 1;
+        }
+
+        .platform-mockup::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0, 229, 204, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .carousel-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .carousel-dot.active {
+            background: var(--cyan);
+            box-shadow: 0 0 15px var(--cyan);
+        }
+
+        /* ============================================
+           STRATEGY SECTION
+           ============================================ */
+        .panel-strategy { background: var(--deep); }
+        
         .panel-strategy .panel-content {
             flex-direction: column;
             align-items: stretch;
@@ -412,20 +737,20 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
-            margin-bottom: 2.5rem;
+            margin-bottom: 3rem;
             border-bottom: 1px solid rgba(255,255,255,0.1);
             padding-bottom: 1.5rem;
         }
 
         .section-title {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-size: clamp(2.5rem, 5vw, 4rem);
             letter-spacing: 0.1em;
         }
 
         .section-num {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 0.9rem;
+            font-size: 1rem;
             color: var(--accent);
             letter-spacing: 0.3em;
         }
@@ -438,8 +763,8 @@
         }
 
         .strategy-card {
-            background: var(--deep);
-            padding: 1.75rem;
+            background: var(--surface);
+            padding: 2rem;
             position: relative;
             overflow: hidden;
             transition: all 0.5s ease;
@@ -462,34 +787,37 @@
         .strategy-card:hover { background: var(--black); }
 
         .strategy-icon {
-            width: 40px;
-            height: 40px;
+            width: 50px;
+            height: 50px;
             border: 1px solid var(--accent);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 1rem;
+            margin-bottom: 1.25rem;
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.1rem;
+            font-size: 1.3rem;
             color: var(--accent);
         }
 
         .strategy-card h3 {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.15rem;
+            font-size: 1.4rem;
             letter-spacing: 0.1em;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
         }
 
         .strategy-card p {
             font-weight: 300;
             color: var(--text-dim);
-            line-height: 1.6;
-            font-size: 0.8rem;
+            line-height: 1.7;
+            font-size: 0.9rem;
         }
 
-        /* Performance */
-        .panel-performance { background: var(--deep); }
+        /* ============================================
+           PERFORMANCE SECTION
+           ============================================ */
+        .panel-performance { background: var(--surface); }
+        
         .panel-performance .panel-content {
             flex-direction: column;
             align-items: stretch;
@@ -498,24 +826,24 @@
         .perf-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 3rem;
+            gap: 4rem;
             align-items: center;
         }
 
         .perf-chart {
-            height: 280px;
+            height: 320px;
             position: relative;
             border: 1px solid rgba(255,255,255,0.1);
-            padding: 1.5rem;
+            padding: 2rem;
             background: rgba(255,255,255,0.02);
         }
 
         .chart-line {
             position: absolute;
-            bottom: 2rem;
-            left: 1.5rem;
-            right: 1.5rem;
-            height: 200px;
+            bottom: 2.5rem;
+            left: 2rem;
+            right: 2rem;
+            height: 230px;
         }
 
         .chart-svg { width: 100%; height: 100%; }
@@ -542,11 +870,11 @@
         .chart-labels {
             position: absolute;
             bottom: 0.5rem;
-            left: 1.5rem;
-            right: 1.5rem;
+            left: 2rem;
+            right: 2rem;
             display: flex;
             justify-content: space-between;
-            font-size: 0.6rem;
+            font-size: 0.7rem;
             color: var(--text-dim);
             letter-spacing: 0.1em;
         }
@@ -554,161 +882,34 @@
         .perf-stats {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 2rem;
+            gap: 2.5rem;
         }
 
         .perf-stat {
             border-left: 1px solid var(--accent);
-            padding-left: 1rem;
+            padding-left: 1.5rem;
         }
 
         .perf-stat-value {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 2.5rem;
+            font-size: 3rem;
             color: var(--accent);
             line-height: 1;
         }
 
         .perf-stat-label {
-            font-size: 0.65rem;
+            font-size: 0.75rem;
             letter-spacing: 0.2em;
             text-transform: uppercase;
             color: var(--text-dim);
-            margin-top: 0.4rem;
+            margin-top: 0.5rem;
         }
 
-        /* Platform */
-        .panel-platform { background: linear-gradient(180deg, #080810 0%, #0a1015 100%); }
-        .panel-platform .panel-content { gap: 3rem; }
-
-        .platform-content {
-            flex: 1;
-            max-width: 450px;
-        }
-
-        .platform-label {
-            font-size: 0.7rem;
-            letter-spacing: 0.4em;
-            text-transform: uppercase;
-            color: var(--cyan);
-            margin-bottom: 0.75rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .platform-label::before {
-            content: '';
-            width: 6px;
-            height: 6px;
-            background: var(--cyan);
-            border-radius: 50%;
-            animation: pulse 2s ease infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
-        }
-
-        .platform-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 2.75rem;
-            letter-spacing: 0.05em;
-            margin-bottom: 1rem;
-            line-height: 1.1;
-        }
-
-        .platform-desc {
-            font-size: 0.95rem;
-            font-weight: 300;
-            color: var(--text-dim);
-            line-height: 1.8;
-            margin-bottom: 1.5rem;
-        }
-
-        .platform-features {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.6rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .platform-feature {
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            font-size: 0.75rem;
-            color: var(--text-dim);
-            background: rgba(0, 229, 204, 0.05);
-            border: 1px solid rgba(0, 229, 204, 0.2);
-            padding: 0.4rem 0.8rem;
-            border-radius: 4px;
-        }
-
-        .platform-feature svg {
-            color: var(--cyan);
-            width: 12px;
-            height: 12px;
-        }
-
-        .btn-cyan {
-            background: var(--cyan);
-            color: var(--black);
-            padding: 1rem 2.5rem;
-            font-size: 0.8rem;
-            font-weight: 600;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            text-decoration: none;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-block;
-        }
-
-        .btn-cyan:hover {
-            box-shadow: 0 0 40px rgba(0, 229, 204, 0.3);
-            transform: translateY(-2px);
-        }
-
-        .platform-visual { flex: 1; }
-
-        .platform-mockup {
-            width: 100%;
-            height: 320px;
-            background: linear-gradient(135deg, rgba(0,229,204,0.08) 0%, rgba(168,85,247,0.08) 100%);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .platform-mockup::before {
-            content: 'FUSION AUTONOMY';
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.3rem;
-            letter-spacing: 0.3em;
-            color: rgba(255,255,255,0.08);
-        }
-
-        .mockup-grid {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                linear-gradient(rgba(0,229,204,0.04) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0,229,204,0.04) 1px, transparent 1px);
-            background-size: 20px 20px;
-        }
-
-        /* Team */
-        .panel-team { background: var(--surface); }
+        /* ============================================
+           TEAM SECTION
+           ============================================ */
+        .panel-team { background: var(--deep); }
+        
         .panel-team .panel-content {
             flex-direction: column;
             align-items: stretch;
@@ -717,21 +918,21 @@
         .team-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 1.25rem;
+            gap: 1.5rem;
         }
 
         .team-card {
             position: relative;
             overflow: hidden;
             aspect-ratio: 3/4;
-            background: linear-gradient(135deg, var(--deep), var(--black));
+            background: linear-gradient(135deg, var(--surface), var(--black));
             border: 1px solid rgba(255,255,255,0.05);
             transition: transform 0.5s ease, box-shadow 0.5s ease;
         }
 
         .team-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.4);
         }
 
         .team-card::before {
@@ -749,22 +950,22 @@
             position: absolute;
             bottom: 0;
             left: 0;
-            padding: 1.25rem;
+            padding: 1.5rem;
             z-index: 2;
         }
 
         .team-name {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.2rem;
+            font-size: 1.4rem;
             letter-spacing: 0.1em;
         }
 
         .team-role {
-            font-size: 0.65rem;
+            font-size: 0.7rem;
             letter-spacing: 0.2em;
             text-transform: uppercase;
             color: var(--accent);
-            margin-top: 0.2rem;
+            margin-top: 0.25rem;
         }
 
         .team-initials {
@@ -773,40 +974,43 @@
             left: 50%;
             transform: translate(-50%, -50%);
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 3.5rem;
+            font-size: 4rem;
             color: rgba(255,255,255,0.03);
             letter-spacing: 0.2em;
         }
 
-        /* Contact */
+        /* ============================================
+           CONTACT SECTION
+           ============================================ */
         .panel-contact { background: var(--black); }
+        
         .panel-contact .panel-content {
             flex-direction: column;
             text-align: center;
         }
 
-        .contact-content { max-width: 600px; }
+        .contact-content { max-width: 650px; }
 
         .contact-title {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-size: clamp(3rem, 7vw, 6rem);
             letter-spacing: 0.1em;
-            margin-bottom: 1.25rem;
+            margin-bottom: 1.5rem;
             line-height: 1.1;
         }
 
         .contact-desc {
             font-weight: 300;
             color: var(--text-dim);
-            max-width: 400px;
-            margin: 0 auto 2rem;
+            max-width: 450px;
+            margin: 0 auto 2.5rem;
             line-height: 1.8;
-            font-size: 0.95rem;
+            font-size: 1rem;
         }
 
         .contact-email {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.5rem;
+            font-size: 2rem;
             color: var(--accent);
             text-decoration: none;
             letter-spacing: 0.1em;
@@ -824,7 +1028,7 @@
             display: flex;
             justify-content: space-between;
             padding: 0 4rem;
-            font-size: 0.65rem;
+            font-size: 0.75rem;
             color: var(--text-dim);
         }
 
@@ -836,58 +1040,55 @@
         .footer-links a {
             color: var(--text-dim);
             text-decoration: none;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.15em;
             text-transform: uppercase;
             transition: color 0.3s ease;
         }
 
         .footer-links a:hover { color: var(--accent); }
 
-        /* Responsive */
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
         @media (max-width: 1200px) {
             .floating-stats { display: none; }
             .strategy-grid { grid-template-columns: repeat(2, 1fr); }
             .team-grid { grid-template-columns: repeat(2, 1fr); }
-            .platform-content { max-width: 100%; }
+            .platform-content { max-width: 100%; flex: 1; }
             .panel-platform .panel-content { flex-direction: column; }
         }
 
         @media (max-width: 768px) {
-            nav { padding: 1.25rem 1.5rem; }
+            nav { padding: 1.5rem; }
             .nav-links { display: none; }
             .panel-content { padding: 5rem 1.5rem; }
             .panel-hero .panel-content { padding-left: 1.5rem; }
-            .hero-title { font-size: clamp(2rem, 8vw, 4rem); }
+            .hero-title { font-size: clamp(2.5rem, 10vw, 5rem); }
             .strategy-grid { grid-template-columns: 1fr; }
             .perf-container { grid-template-columns: 1fr; }
             .team-grid { grid-template-columns: 1fr 1fr; }
             .section-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
-            .section-title { font-size: 1.75rem; }
             .footer-content { flex-direction: column; align-items: center; gap: 1rem; padding: 0 1.5rem; }
             .section-counter { right: 1.5rem; }
-            .direction-hint { bottom: 2rem; }
         }
     </style>
 </head>
 <body>
-    <!-- Progress bar -->
     <div class="progress-bar" id="progressBar"></div>
 
-    <!-- Navigation -->
     <nav>
         <div class="logo">MX<span class="logo-1">1</span></div>
         <ul class="nav-links">
             <li><a data-goto="0" class="active">Home</a></li>
             <li><a data-goto="1">About</a></li>
-            <li><a data-goto="2">Strategy</a></li>
-            <li><a data-goto="3">Performance</a></li>
-            <li><a data-goto="4">Platform</a></li>
+            <li><a data-goto="2">Platform</a></li>
+            <li><a data-goto="3">Strategy</a></li>
+            <li><a data-goto="4">Performance</a></li>
             <li><a data-goto="5">Team</a></li>
             <li><a data-goto="6">Contact</a></li>
         </ul>
     </nav>
 
-    <!-- Direction hint -->
     <div class="direction-hint" data-direction="right" id="directionHint">
         <span>Scroll</span>
         <div class="arrow">
@@ -897,13 +1098,11 @@
         </div>
     </div>
 
-    <!-- Section counter -->
     <div class="section-counter">
         <div class="current" id="currentSection">01</div>
         <div class="total">/ 07</div>
     </div>
 
-    <!-- 3D Viewport -->
     <div class="viewport">
         <div class="world" id="world">
             
@@ -911,6 +1110,8 @@
             <div class="panel panel-hero" data-index="0">
                 <div class="panel-content">
                     <div class="hero-bg"></div>
+                    <div class="hero-overlay"></div>
+                    
                     <div class="hero-content">
                         <p class="hero-tag">Quantitative Excellence Since 2018</p>
                         <h1 class="hero-title">
@@ -923,14 +1124,22 @@
                         </p>
                         <div class="cta-group">
                             <a class="btn-primary" data-goto="6">Request Access</a>
-                            <a class="btn-secondary" data-goto="2">
+                            <a class="btn-secondary" data-goto="3">
                                 Learn More
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M5 12h14M12 5l7 7-7 7"/>
                                 </svg>
                             </a>
                         </div>
+                        <div class="invite-badge">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                            </svg>
+                            Private Platform • Invite Only
+                        </div>
                     </div>
+                    
                     <div class="floating-stats">
                         <div class="stat-item">
                             <div class="stat-value">$2.4<span class="plus">B</span></div>
@@ -945,22 +1154,84 @@
                             <div class="stat-label">Sharpe Ratio</div>
                         </div>
                     </div>
+                    
+                    <div class="marquee">
+                        <div class="marquee-content">
+                            <span class="marquee-item">SYSTEMATIC TRADING</span>
+                            <span class="marquee-item">MACHINE LEARNING</span>
+                            <span class="marquee-item">QUANTITATIVE RESEARCH</span>
+                            <span class="marquee-item">ALTERNATIVE DATA</span>
+                            <span class="marquee-item">RISK MANAGEMENT</span>
+                            <span class="marquee-item">SYSTEMATIC TRADING</span>
+                            <span class="marquee-item">MACHINE LEARNING</span>
+                            <span class="marquee-item">QUANTITATIVE RESEARCH</span>
+                            <span class="marquee-item">ALTERNATIVE DATA</span>
+                            <span class="marquee-item">RISK MANAGEMENT</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <!-- Panel 1: About -->
             <div class="panel panel-about" data-index="1">
                 <div class="panel-content">
+                    <div class="about-bg"></div>
+                    <div class="about-overlay"></div>
+                    
                     <div class="about-content">
                         <p class="about-label">About MX1</p>
-                        <h2 class="about-title">BUILDING THE FUTURE OF<br>QUANTITATIVE INVESTING</h2>
+                        <h2 class="about-title">BUILDING THE FUTURE OF QUANTITATIVE INVESTING</h2>
                         <p class="about-text">MX1 Holdings is a multi-strategy investment firm leveraging AI, quantitative research, and disciplined risk management to generate consistent alpha across digital and traditional asset markets.</p>
                     </div>
                 </div>
             </div>
 
-            <!-- Panel 2: Strategy -->
-            <div class="panel panel-strategy" data-index="2">
+            <!-- Panel 2: Platform (Fusion Autonomy) -->
+            <div class="panel panel-platform" data-index="2">
+                <div class="panel-content">
+                    <div class="platform-content">
+                        <p class="platform-label">Exclusive Access</p>
+                        <h2 class="platform-title">FUSION AUTONOMY</h2>
+                        <p class="platform-subtitle">AI-Powered Trading Predictions</p>
+                        <p class="platform-desc">Our proprietary crypto prediction engine combines machine learning models with real-time market analysis to deliver actionable trading signals.</p>
+                        <div class="platform-features">
+                            <div class="platform-feature">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                                </svg>
+                                Real-time Signals
+                            </div>
+                            <div class="platform-feature">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                                </svg>
+                                Multi-Asset
+                            </div>
+                            <div class="platform-feature">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                </svg>
+                                Invite Only
+                            </div>
+                        </div>
+                        <a class="btn-cyan" data-goto="6">Request Invitation</a>
+                    </div>
+                    <div class="platform-visual">
+                        <div class="platform-mockup">
+                            <img src="platform-ui-1.png" alt="Fusion Autonomy Dashboard" class="active">
+                            <img src="platform-ui-2.png" alt="Fusion Autonomy Agents">
+                        </div>
+                        <div class="carousel-dots">
+                            <div class="carousel-dot active" data-slide="0"></div>
+                            <div class="carousel-dot" data-slide="1"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Panel 3: Strategy -->
+            <div class="panel panel-strategy" data-index="3">
                 <div class="panel-content">
                     <div class="section-header">
                         <h2 class="section-title">OUR APPROACH</h2>
@@ -970,39 +1241,39 @@
                         <div class="strategy-card">
                             <div class="strategy-icon">Σ</div>
                             <h3>STATISTICAL ARBITRAGE</h3>
-                            <p>Exploiting mean-reversion patterns using advanced cointegration models.</p>
+                            <p>Exploiting mean-reversion patterns across correlated securities using advanced cointegration models.</p>
                         </div>
                         <div class="strategy-card">
                             <div class="strategy-icon">Δ</div>
                             <h3>MOMENTUM STRATEGIES</h3>
-                            <p>Capturing trends through adaptive momentum indicators.</p>
+                            <p>Capturing trending behavior through adaptive momentum indicators across multiple timeframes.</p>
                         </div>
                         <div class="strategy-card">
                             <div class="strategy-icon">Ω</div>
                             <h3>MARKET MAKING</h3>
-                            <p>Providing liquidity with tight risk controls.</p>
+                            <p>Providing liquidity across global exchanges while maintaining tight risk controls.</p>
                         </div>
                         <div class="strategy-card">
                             <div class="strategy-icon">∞</div>
                             <h3>MACHINE LEARNING</h3>
-                            <p>Deep learning for alternative data pattern recognition.</p>
+                            <p>Deploying deep learning architectures for pattern recognition in alternative data sources.</p>
                         </div>
                         <div class="strategy-card">
                             <div class="strategy-icon">λ</div>
                             <h3>OPTIONS VOLATILITY</h3>
-                            <p>Trading implied vs realized volatility spreads.</p>
+                            <p>Trading implied versus realized volatility spreads using proprietary surface modeling.</p>
                         </div>
                         <div class="strategy-card">
                             <div class="strategy-icon">∂</div>
                             <h3>GLOBAL MACRO</h3>
-                            <p>Systematic allocation based on factor models.</p>
+                            <p>Systematic allocation across FX, rates, and commodities based on factor models.</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Panel 3: Performance -->
-            <div class="panel panel-performance" data-index="3">
+            <!-- Panel 4: Performance -->
+            <div class="panel panel-performance" data-index="4">
                 <div class="panel-content">
                     <div class="section-header">
                         <h2 class="section-title">TRACK RECORD</h2>
@@ -1046,44 +1317,6 @@
                                 <div class="perf-stat-value">2.87</div>
                                 <div class="perf-stat-label">Sortino Ratio</div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Panel 4: Platform -->
-            <div class="panel panel-platform" data-index="4">
-                <div class="panel-content">
-                    <div class="platform-content">
-                        <p class="platform-label">Exclusive Access</p>
-                        <h2 class="platform-title">FUSION AUTONOMY</h2>
-                        <p class="platform-desc">Our proprietary crypto prediction engine combines machine learning with real-time market analysis for actionable trading signals.</p>
-                        <div class="platform-features">
-                            <div class="platform-feature">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-                                </svg>
-                                Real-time Signals
-                            </div>
-                            <div class="platform-feature">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-                                </svg>
-                                Multi-Asset
-                            </div>
-                            <div class="platform-feature">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-                                </svg>
-                                Invite Only
-                            </div>
-                        </div>
-                        <a class="btn-cyan" data-goto="6">Request Invitation</a>
-                    </div>
-                    <div class="platform-visual">
-                        <div class="platform-mockup">
-                            <div class="mockup-grid"></div>
                         </div>
                     </div>
                 </div>
@@ -1134,14 +1367,14 @@
                 <div class="panel-content">
                     <div class="contact-content">
                         <h2 class="contact-title">LET'S BUILD<br>ALPHA TOGETHER</h2>
-                        <p class="contact-desc">Accredited investors and institutional allocators are invited to request our detailed performance materials.</p>
+                        <p class="contact-desc">Accredited investors and institutional allocators are invited to request our detailed performance materials and strategy documentation.</p>
                         <a href="mailto:invest@mx1.capital" class="contact-email">invest@mx1.capital</a>
                     </div>
                     <div class="footer-content">
                         <div>MX1 CAPITAL © 2024</div>
                         <div class="footer-links">
-                            <a href="#">Privacy</a>
-                            <a href="#">Terms</a>
+                            <a href="#">Privacy Policy</a>
+                            <a href="#">Terms of Service</a>
                             <a href="#">Disclosures</a>
                         </div>
                     </div>
@@ -1152,104 +1385,80 @@
     </div>
 
     <script>
-        // ============================================
-        // SMOOTH CONTINUOUS SCROLL THROUGH 3D PATH
-        // ============================================
-        
         const world = document.getElementById('world');
         const progressBar = document.getElementById('progressBar');
         const directionHint = document.getElementById('directionHint');
         const currentSectionEl = document.getElementById('currentSection');
         const navLinks = document.querySelectorAll('.nav-links a');
         
-        // Path segments - defines the scroll path through 3D space
-        // Each segment has: start position, end position, length (in scroll units)
+        /*
+        PATH: Snake through 3D space
+        [0:Hero] → [1:About] → [2:Platform]
+                                    ↓
+                              [3:Strategy] → [4:Perf] → [5:Team]
+                                                            ↓
+                                                        [6:Contact]
+        */
         const pathSegments = [
-            // Segment 0: Panel 0 to Panel 1 (RIGHT)
-            { startX: 0, startY: 0, endX: 100, endY: 0, direction: 'right' },
-            // Segment 1: Panel 1 to Panel 2 (RIGHT)
-            { startX: 100, startY: 0, endX: 200, endY: 0, direction: 'right' },
-            // Segment 2: Panel 2 to Panel 3 (DOWN)
-            { startX: 200, startY: 0, endX: 200, endY: 100, direction: 'down' },
-            // Segment 3: Panel 3 to Panel 4 (DOWN)
-            { startX: 200, startY: 100, endX: 200, endY: 200, direction: 'down' },
-            // Segment 4: Panel 4 to Panel 5 (RIGHT)
-            { startX: 200, startY: 200, endX: 300, endY: 200, direction: 'right' },
-            // Segment 5: Panel 5 to Panel 6 (RIGHT)
-            { startX: 300, startY: 200, endX: 400, endY: 200, direction: 'right' }
+            { startX: 0, startY: 0, endX: 100, endY: 0, direction: 'right' },     // 0→1
+            { startX: 100, startY: 0, endX: 200, endY: 0, direction: 'right' },   // 1→2
+            { startX: 200, startY: 0, endX: 200, endY: 100, direction: 'down' },  // 2→3
+            { startX: 200, startY: 100, endX: 300, endY: 100, direction: 'right' },// 3→4
+            { startX: 300, startY: 100, endX: 400, endY: 100, direction: 'right' },// 4→5
+            { startX: 400, startY: 100, endX: 400, endY: 200, direction: 'down' } // 5→6
         ];
         
         const totalSegments = pathSegments.length;
-        const scrollPerSegment = 1000; // pixels of scroll per segment
+        const scrollPerSegment = 800;
         const totalScrollLength = totalSegments * scrollPerSegment;
         
         let currentScroll = 0;
         let targetScroll = 0;
         let isAnimating = false;
-        let lastChartTrigger = -1;
+        let chartAnimated = false;
         
-        // Smooth lerp function
         function lerp(start, end, factor) {
             return start + (end - start) * factor;
         }
         
-        // Get position along path based on scroll progress
         function getPositionOnPath(scroll) {
-            // Clamp scroll
             scroll = Math.max(0, Math.min(scroll, totalScrollLength));
-            
-            // Find which segment we're in
             const segmentIndex = Math.min(Math.floor(scroll / scrollPerSegment), totalSegments - 1);
             const segmentProgress = (scroll % scrollPerSegment) / scrollPerSegment;
-            
-            // Handle last segment edge case
             const segment = pathSegments[segmentIndex];
-            
-            // Interpolate position within segment
             const x = lerp(segment.startX, segment.endX, segmentProgress);
             const y = lerp(segment.startY, segment.endY, segmentProgress);
-            
             return { x, y, segmentIndex, segmentProgress };
         }
         
-        // Update world position
         function updateWorld() {
-            // Smooth scroll towards target
-            currentScroll = lerp(currentScroll, targetScroll, 0.12);
-            
-            // Get position on path
+            currentScroll = lerp(currentScroll, targetScroll, 0.1);
             const pos = getPositionOnPath(currentScroll);
             
-            // Move world (negative to bring panel into view)
             world.style.transform = `translate3d(${-pos.x}vw, ${-pos.y}vh, 0)`;
             
-            // Update progress bar
             const progress = currentScroll / totalScrollLength;
             progressBar.style.transform = `scaleX(${progress})`;
             
-            // Update current section number
             const currentPanel = Math.round(currentScroll / scrollPerSegment);
             currentSectionEl.textContent = String(Math.min(currentPanel + 1, 7)).padStart(2, '0');
             
-            // Update nav links
             navLinks.forEach((link, i) => {
                 link.classList.toggle('active', i === currentPanel);
             });
             
-            // Update direction hint
             if (pos.segmentIndex < totalSegments) {
                 directionHint.dataset.direction = pathSegments[pos.segmentIndex].direction;
                 directionHint.style.opacity = currentPanel >= 6 ? '0' : '1';
             }
             
-            // Trigger chart animation when reaching performance section
-            if (currentPanel === 3 && lastChartTrigger !== 3) {
-                lastChartTrigger = 3;
+            // Animate chart when reaching performance section
+            if (currentPanel === 4 && !chartAnimated) {
+                chartAnimated = true;
                 document.querySelector('.chart-path')?.classList.add('animate');
                 document.querySelector('.chart-fill')?.classList.add('animate');
             }
             
-            // Continue animation loop
             if (Math.abs(currentScroll - targetScroll) > 0.5) {
                 requestAnimationFrame(updateWorld);
             } else {
@@ -1257,7 +1466,6 @@
             }
         }
         
-        // Start animation loop
         function startAnimation() {
             if (!isAnimating) {
                 isAnimating = true;
@@ -1265,86 +1473,43 @@
             }
         }
         
-        // Handle wheel/trackpad scroll
+        // Wheel/trackpad
         window.addEventListener('wheel', (e) => {
             e.preventDefault();
-            
-            // Use deltaY for vertical scroll, deltaX for horizontal
-            // Trackpads often send both, mice usually just deltaY
             const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
-            
-            // Adjust scroll speed (lower = slower, higher = faster)
-            targetScroll += delta * 1.5;
-            
-            // Clamp to bounds
+            targetScroll += delta * 1.2;
             targetScroll = Math.max(0, Math.min(targetScroll, totalScrollLength));
-            
             startAnimation();
         }, { passive: false });
         
-        // Touch support
-        let touchStartY = 0;
-        let touchStartX = 0;
-        let lastTouchY = 0;
-        let lastTouchX = 0;
-        
+        // Touch
+        let lastTouchY = 0, lastTouchX = 0;
         window.addEventListener('touchstart', (e) => {
-            touchStartY = e.touches[0].clientY;
-            touchStartX = e.touches[0].clientX;
-            lastTouchY = touchStartY;
-            lastTouchX = touchStartX;
+            lastTouchY = e.touches[0].clientY;
+            lastTouchX = e.touches[0].clientX;
         }, { passive: true });
         
         window.addEventListener('touchmove', (e) => {
             e.preventDefault();
-            
-            const touchY = e.touches[0].clientY;
-            const touchX = e.touches[0].clientX;
-            
-            const deltaY = lastTouchY - touchY;
-            const deltaX = lastTouchX - touchX;
-            
-            // Use whichever axis has more movement
+            const deltaY = lastTouchY - e.touches[0].clientY;
+            const deltaX = lastTouchX - e.touches[0].clientX;
             const delta = Math.abs(deltaX) > Math.abs(deltaY) ? deltaX : deltaY;
-            
             targetScroll += delta * 2;
             targetScroll = Math.max(0, Math.min(targetScroll, totalScrollLength));
-            
-            lastTouchY = touchY;
-            lastTouchX = touchX;
-            
+            lastTouchY = e.touches[0].clientY;
+            lastTouchX = e.touches[0].clientX;
             startAnimation();
         }, { passive: false });
         
-        // Keyboard navigation
+        // Keyboard
         window.addEventListener('keydown', (e) => {
             let delta = 0;
-            
-            switch(e.key) {
-                case 'ArrowDown':
-                case 'ArrowRight':
-                    delta = scrollPerSegment * 0.5;
-                    break;
-                case 'ArrowUp':
-                case 'ArrowLeft':
-                    delta = -scrollPerSegment * 0.5;
-                    break;
-                case 'PageDown':
-                case ' ':
-                    delta = scrollPerSegment;
-                    break;
-                case 'PageUp':
-                    delta = -scrollPerSegment;
-                    break;
-                case 'Home':
-                    targetScroll = 0;
-                    startAnimation();
-                    return;
-                case 'End':
-                    targetScroll = totalScrollLength;
-                    startAnimation();
-                    return;
-            }
+            if (['ArrowDown', 'ArrowRight'].includes(e.key)) delta = scrollPerSegment * 0.4;
+            else if (['ArrowUp', 'ArrowLeft'].includes(e.key)) delta = -scrollPerSegment * 0.4;
+            else if (e.key === 'PageDown' || e.key === ' ') delta = scrollPerSegment;
+            else if (e.key === 'PageUp') delta = -scrollPerSegment;
+            else if (e.key === 'Home') { targetScroll = 0; startAnimation(); return; }
+            else if (e.key === 'End') { targetScroll = totalScrollLength; startAnimation(); return; }
             
             if (delta !== 0) {
                 e.preventDefault();
@@ -1354,18 +1519,30 @@
             }
         });
         
-        // Click navigation - jump to section
+        // Click navigation
         document.querySelectorAll('[data-goto]').forEach(el => {
             el.addEventListener('click', (e) => {
                 e.preventDefault();
-                const sectionIndex = parseInt(el.dataset.goto);
-                targetScroll = sectionIndex * scrollPerSegment;
+                targetScroll = parseInt(el.dataset.goto) * scrollPerSegment;
                 targetScroll = Math.max(0, Math.min(targetScroll, totalScrollLength));
                 startAnimation();
             });
         });
         
-        // Initialize
+        // Platform carousel
+        const platformImages = document.querySelectorAll('.platform-mockup img');
+        const carouselDots = document.querySelectorAll('.carousel-dot');
+        let currentSlide = 0;
+        
+        function showSlide(index) {
+            platformImages.forEach((img, i) => img.classList.toggle('active', i === index));
+            carouselDots.forEach((dot, i) => dot.classList.toggle('active', i === index));
+            currentSlide = index;
+        }
+        
+        setInterval(() => showSlide((currentSlide + 1) % platformImages.length), 4000);
+        carouselDots.forEach((dot, i) => dot.addEventListener('click', () => showSlide(i)));
+        
         updateWorld();
     </script>
 </body>
