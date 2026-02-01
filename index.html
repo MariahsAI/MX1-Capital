@@ -1968,6 +1968,12 @@
             mobileMenu.classList.toggle('active');
         });
         
+        // Slow down the about video
+        const aboutVideo = document.querySelector('.about-video');
+        if (aboutVideo) {
+            aboutVideo.playbackRate = 0.25;
+        }
+        
         // Close mobile menu when clicking a link
         mobileMenuLinks.forEach(link => {
             link.addEventListener('click', () => {
