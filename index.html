@@ -410,27 +410,24 @@
             transform: translateY(-50%);
             display: flex;
             flex-direction: column;
-            gap: 2.5rem;
+            gap: 2rem;
             z-index: 10;
         }
 
-        .floating-stats::before {
-            content: 'LIVE DATA';
-            position: absolute;
-            top: -2.5rem;
-            right: 0;
-            font-size: 0.65rem;
-            letter-spacing: 0.3em;
+        .floating-stats-label {
+            font-size: 0.8rem;
+            letter-spacing: 0.4em;
             color: var(--cyan);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .floating-stats::after {
+        .floating-stats-label::before {
             content: '';
-            position: absolute;
-            top: -2rem;
-            right: 5rem;
-            width: 6px;
-            height: 6px;
+            width: 8px;
+            height: 8px;
             background: var(--cyan);
             border-radius: 50%;
             animation: pulse 1.5s ease infinite;
@@ -440,36 +437,41 @@
         .stat-item {
             text-align: right;
             padding-right: 1.5rem;
-            border-right: 2px solid var(--accent);
+            border-right: 3px solid var(--accent);
+            position: relative;
         }
 
         .stat-item::after {
             content: '';
             position: absolute;
-            right: -6px;
+            right: -7px;
             top: 50%;
             transform: translateY(-50%);
-            width: 10px;
-            height: 10px;
+            width: 11px;
+            height: 11px;
             background: var(--cyan);
             box-shadow: 0 0 15px var(--cyan);
         }
 
         .stat-value {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 3.5rem;
+            font-size: 4.5rem;
             color: var(--text);
             line-height: 1;
+            text-shadow: 0 2px 20px rgba(0,0,0,0.5);
         }
 
-        .stat-value .plus { color: var(--accent); }
+        .stat-value .plus { 
+            color: var(--accent); 
+        }
 
         .stat-label {
-            font-size: 0.7rem;
-            letter-spacing: 0.25em;
+            font-size: 0.85rem;
+            letter-spacing: 0.3em;
             text-transform: uppercase;
-            color: rgba(255,255,255,0.6);
-            margin-top: 0.3rem;
+            color: rgba(255,255,255,0.9);
+            margin-top: 0.5rem;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
         }
 
         @keyframes pulse {
@@ -1141,6 +1143,7 @@
                     </div>
                     
                     <div class="floating-stats">
+                        <div class="floating-stats-label">LIVE DATA</div>
                         <div class="stat-item">
                             <div class="stat-value">$2.4<span class="plus">B</span></div>
                             <div class="stat-label">Assets Under Management</div>
