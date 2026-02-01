@@ -619,17 +619,27 @@
             background: var(--deep);
         }
 
-        .about-bg {
+        .about-video-container {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url('about-bg.jpg');
-            background-size: cover;
-            background-position: center;
-            filter: brightness(0.4);
+            overflow: hidden;
             z-index: 0;
+        }
+
+        .about-video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+            opacity: 0.5;
         }
 
         .about-overlay {
@@ -1635,7 +1645,11 @@
             <!-- Panel 1: About -->
             <div class="panel panel-about" data-index="1">
                 <div class="panel-content">
-                    <div class="about-bg"></div>
+                    <div class="about-video-container">
+                        <video class="about-video" autoplay muted loop playsinline>
+                            <source src="about-bg.mp4" type="video/mp4">
+                        </video>
+                    </div>
                     <div class="about-overlay"></div>
                     
                     <div class="about-content">
