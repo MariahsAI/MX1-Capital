@@ -1099,6 +1099,91 @@
             color: var(--cyan);
         }
 
+        .metric-value.profit {
+            color: #22c55e;
+        }
+
+        .icon-profit {
+            background: rgba(34, 197, 94, 0.15) !important;
+        }
+
+        .icon-profit svg {
+            color: #22c55e !important;
+        }
+
+        /* Trade Executed Card */
+        .trade-card {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 1rem;
+            padding: 1.25rem 1.5rem;
+        }
+
+        .trade-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .trade-status-dot {
+            width: 10px;
+            height: 10px;
+            background: #22c55e;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #22c55e;
+            animation: pulse 2s ease infinite;
+        }
+
+        .trade-title {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .trade-badge {
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            padding: 0.25rem 0.6rem;
+            border-radius: 4px;
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+            margin-left: auto;
+        }
+
+        .trade-details {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .trade-detail {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .trade-detail-label {
+            font-size: 0.6rem;
+            letter-spacing: 0.15em;
+            color: var(--text-dim);
+            text-transform: uppercase;
+        }
+
+        .trade-detail-value {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .trade-detail-value.profit {
+            color: #22c55e;
+        }
+
+        .trade-detail-value.loss {
+            color: #ef4444;
+        }
+
         .platform-label {
             font-size: 0.7rem;
             letter-spacing: 0.4em;
@@ -2118,24 +2203,40 @@
                                 <div class="metric-status online">Running</div>
                             </div>
                             <div class="metric-card metric-card-2">
-                                <div class="metric-icon">
+                                <div class="metric-icon icon-profit">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                                        <polyline points="17 6 23 6 23 12"/>
                                     </svg>
                                 </div>
-                                <div class="metric-value">98.7%</div>
-                                <div class="metric-label">System Uptime</div>
-                                <div class="metric-status online">Healthy</div>
+                                <div class="metric-value profit">+2.4%</div>
+                                <div class="metric-label">24h P&L</div>
+                                <div class="metric-status online">Profitable</div>
                             </div>
-                            <div class="metric-card metric-card-3">
-                                <div class="metric-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-                                    </svg>
+                            <div class="metric-card trade-card metric-card-3">
+                                <div class="trade-header">
+                                    <div class="trade-status-dot"></div>
+                                    <span class="trade-title">Trade Executed</span>
+                                    <span class="trade-badge">BUY</span>
                                 </div>
-                                <div class="metric-value">$2.4B</div>
-                                <div class="metric-label">Volume Analyzed</div>
-                                <div class="metric-status">Last 24h</div>
+                                <div class="trade-details">
+                                    <div class="trade-detail">
+                                        <span class="trade-detail-label">SYMBOL</span>
+                                        <span class="trade-detail-value">BTC/USDT</span>
+                                    </div>
+                                    <div class="trade-detail">
+                                        <span class="trade-detail-label">ENTRY</span>
+                                        <span class="trade-detail-value">$81,217.48</span>
+                                    </div>
+                                    <div class="trade-detail">
+                                        <span class="trade-detail-label">TARGET</span>
+                                        <span class="trade-detail-value profit">$84,655.42</span>
+                                    </div>
+                                    <div class="trade-detail">
+                                        <span class="trade-detail-label">STOP</span>
+                                        <span class="trade-detail-value loss">$78,872.03</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
