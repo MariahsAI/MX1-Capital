@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -45,10 +44,9 @@
             left: 0;
             width: 100%;
             height: 100%;
-            perspective: 1200px;
+            perspective: 1500px;
             perspective-origin: 50% 50%;
             overflow: hidden;
-            background: var(--deep);
         }
 
         .world {
@@ -57,7 +55,8 @@
             height: 100%;
             transform-style: preserve-3d;
             will-change: transform;
-            transition: transform 0.05s ease-out;
+            --tx: 0vw;
+            --ty: 0vh;
         }
 
         .panel {
@@ -69,19 +68,6 @@
             justify-content: center;
             backface-visibility: hidden;
             overflow: hidden;
-            opacity: 0;
-            filter: blur(10px);
-            transition: opacity 0.8s ease, filter 0.8s ease;
-        }
-
-        .panel.active {
-            opacity: 1;
-            filter: blur(0);
-        }
-
-        .panel.adjacent {
-            opacity: 0.3;
-            filter: blur(5px);
         }
 
         .panel-content {
@@ -94,12 +80,6 @@
             position: relative;
             overflow-y: auto;
             overflow-x: hidden;
-            transform: scale(0.9);
-            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .panel.active .panel-content {
-            transform: scale(1);
         }
 
         /* 
@@ -110,16 +90,248 @@
                                                             ↓
                                                         [6:Contact]
         */
-        .panel[data-index="0"] { transform: translate3d(0, 0, 0); opacity: 1; filter: blur(0); }
-        .panel[data-index="0"] .panel-content { transform: scale(1); }
-        .panel[data-index="1"] { transform: translate3d(100vw, 0, -500px); }
-        .panel[data-index="2"] { transform: translate3d(200vw, 0, -500px); }
-        .panel[data-index="3"] { transform: translate3d(200vw, 100vh, -500px); }
-        .panel[data-index="4"] { transform: translate3d(300vw, 100vh, -500px); }
-        .panel[data-index="5"] { transform: translate3d(400vw, 100vh, -500px); }
-        .panel[data-index="6"] { transform: translate3d(400vw, 200vh, -500px); }
+        .panel[data-index="0"] { transform: translate3d(0, 0, 0); }
+        .panel[data-index="1"] { transform: translate3d(100vw, 0, 0); }
+        .panel[data-index="2"] { transform: translate3d(200vw, 0, 0); }
+        .panel[data-index="3"] { transform: translate3d(200vw, 100vh, 0); }
+        .panel[data-index="4"] { transform: translate3d(300vw, 100vh, 0); }
+        .panel[data-index="5"] { transform: translate3d(400vw, 100vh, 0); }
+        .panel[data-index="6"] { transform: translate3d(400vw, 200vh, 0); }
 
-        /* Navigation */
+        /* ============================================
+           CINEMATIC TRANSITION SYSTEM
+           ============================================ */
+        
+        /* The blackout curtain - like a film fade */
+        .cinema-curtain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 900;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .cinema-curtain.active {
+            opacity: 1;
+        }
+
+        /* Depth blur overlay - creates focus shift effect */
+        .cinema-blur {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 449;
+            pointer-events: none;
+            backdrop-filter: blur(0px);
+            -webkit-backdrop-filter: blur(0px);
+            transition: backdrop-filter 0.6s ease, -webkit-backdrop-filter 0.6s ease;
+        }
+
+        .cinema-blur.active {
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        /* Depth fog - adds atmospheric depth */
+        .cinema-depth-fog {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 448;
+            pointer-events: none;
+            opacity: 0;
+            background: radial-gradient(ellipse at center, transparent 0%, rgba(5, 5, 8, 0.6) 100%);
+            transition: opacity 0.5s ease;
+        }
+
+        .cinema-depth-fog.active {
+            opacity: 1;
+        }
+
+        /* Fog/atmosphere layer */
+        .cinema-fog {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 450;
+            pointer-events: none;
+            opacity: 0;
+            background: 
+                radial-gradient(ellipse at 20% 50%, rgba(168, 85, 247, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 50%, rgba(0, 229, 204, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 100%, rgba(0, 0, 0, 0.8) 0%, transparent 60%);
+            transition: opacity 0.8s ease;
+        }
+
+        .cinema-fog.active {
+            opacity: 1;
+        }
+
+        /* Ambient particles floating */
+        .cinema-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 451;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: floatParticle 8s infinite ease-in-out;
+        }
+
+        @keyframes floatParticle {
+            0%, 100% { 
+                transform: translateY(0) translateX(0); 
+                opacity: 0;
+            }
+            10% { opacity: 0.5; }
+            50% { 
+                transform: translateY(-100px) translateX(20px); 
+                opacity: 0.3;
+            }
+            90% { opacity: 0.5; }
+        }
+
+        /* Door/portal reveal effect */
+        .cinema-doors {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 800;
+            pointer-events: none;
+            display: flex;
+        }
+
+        .cinema-door {
+            flex: 1;
+            height: 100%;
+            background: linear-gradient(90deg, #000 0%, #0a0a0a 50%, #000 100%);
+            transition: transform 0.8s cubic-bezier(0.76, 0, 0.24, 1);
+        }
+
+        .cinema-door-left {
+            transform: translateX(-100%);
+            box-shadow: 20px 0 60px rgba(0,0,0,0.8);
+        }
+
+        .cinema-door-right {
+            transform: translateX(100%);
+            box-shadow: -20px 0 60px rgba(0,0,0,0.8);
+        }
+
+        .cinema-doors.closing .cinema-door-left {
+            transform: translateX(0);
+        }
+
+        .cinema-doors.closing .cinema-door-right {
+            transform: translateX(0);
+        }
+
+        /* Light beam that reveals the next room */
+        .cinema-light {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            width: 0;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(168, 85, 247, 0.03) 20%,
+                rgba(255, 255, 255, 0.05) 50%,
+                rgba(168, 85, 247, 0.03) 80%,
+                transparent 100%
+            );
+            transform: translateX(-50%);
+            z-index: 799;
+            pointer-events: none;
+            transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .cinema-light.active {
+            width: 100vw;
+        }
+
+        /* Subtle lens flare on transition */
+        .cinema-flare {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 300px;
+            height: 300px;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.4) 0%, transparent 70%);
+            z-index: 801;
+            pointer-events: none;
+            opacity: 0;
+            filter: blur(40px);
+            transition: opacity 0.3s ease, transform 0.8s ease;
+        }
+
+        .cinema-flare.active {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(3);
+        }
+
+        /* Bottom shadow that grounds each room */
+        .room-shadow {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 100%);
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        /* Scan line animation */
+        @keyframes scanDown {
+            0% { 
+                top: 0; 
+                opacity: 1;
+            }
+            100% { 
+                top: 100%; 
+                opacity: 0.5;
+            }
+        }
+
+        /* Glitch shake effect */
+        @keyframes glitchShake {
+            0%, 100% { transform: translate3d(var(--tx), var(--ty), 0); }
+            10% { transform: translate3d(calc(var(--tx) + 5px), var(--ty), 0); }
+            20% { transform: translate3d(calc(var(--tx) - 5px), calc(var(--ty) + 2px), 0); }
+            30% { transform: translate3d(calc(var(--tx) + 3px), var(--ty), 0); }
+            40% { transform: translate3d(calc(var(--tx) - 3px), calc(var(--ty) - 2px), 0); }
+            50% { transform: translate3d(calc(var(--tx) + 2px), var(--ty), 0); }
+            60% { transform: translate3d(var(--tx), calc(var(--ty) + 3px), 0); }
+            70% { transform: translate3d(calc(var(--tx) - 2px), var(--ty), 0); }
+            80% { transform: translate3d(calc(var(--tx) + 1px), calc(var(--ty) - 1px), 0); }
+            90% { transform: translate3d(var(--tx), var(--ty), 0); }
+        }
+/* Navigation */
         nav {
             position: fixed;
             top: 0;
@@ -1534,6 +1746,19 @@
 <body>
     <div class="progress-bar" id="progressBar"></div>
 
+    <!-- Cinematic Transition System -->
+    <div class="cinema-curtain" id="cinemaCurtain"></div>
+    <div class="cinema-doors" id="cinemaDoors">
+        <div class="cinema-door cinema-door-left"></div>
+        <div class="cinema-door cinema-door-right"></div>
+    </div>
+    <div class="cinema-flare" id="cinemaFlare"></div>
+    <div class="cinema-light" id="cinemaLight"></div>
+    <div class="cinema-blur" id="cinemaBlur"></div>
+    <div class="cinema-depth-fog" id="cinemaDepthFog"></div>
+    <div class="cinema-fog" id="cinemaFog"></div>
+    <div class="cinema-particles" id="cinemaParticles"></div>
+
     <nav>
         <div class="logo" style="visibility: hidden;">MX<span class="logo-1">1</span></div>
         <ul class="nav-links">
@@ -1933,13 +2158,22 @@
         }
         
         function updateWorld() {
-            currentScroll = lerp(currentScroll, targetScroll, 0.08);
+            // Smoother easing - more organic movement
+            const easeFactor = 0.08;
+            currentScroll = lerp(currentScroll, targetScroll, easeFactor);
             const pos = getPositionOnPath(currentScroll);
             
-            // Calculate z-depth based on transition progress
-            const transitionProgress = pos.segmentProgress;
-            const zDepth = Math.sin(transitionProgress * Math.PI) * 200;
+            // Calculate z-depth based on how far between panels we are
+            // Creates that "push through" feeling without changing panel size
+            const distanceFromCenter = Math.abs((currentScroll % scrollPerSegment) - (scrollPerSegment / 2));
+            const normalizedDistance = distanceFromCenter / (scrollPerSegment / 2);
+            const zDepth = (1 - normalizedDistance) * 100; // Push forward in the middle of transition
             
+            // Store current position for glitch animation
+            world.style.setProperty('--tx', `${-pos.x}vw`);
+            world.style.setProperty('--ty', `${-pos.y}vh`);
+            
+            // Apply transform with z-depth
             world.style.transform = `translate3d(${-pos.x}vw, ${-pos.y}vh, ${zDepth}px)`;
             
             const progress = currentScroll / totalScrollLength;
@@ -1947,21 +2181,6 @@
             
             const currentPanel = Math.round(currentScroll / scrollPerSegment);
             currentSectionEl.textContent = String(Math.min(currentPanel + 1, 7)).padStart(2, '0');
-            
-            // Update panel visibility and effects
-            document.querySelectorAll('.panel').forEach((panel, i) => {
-                const distance = Math.abs(i - (currentScroll / scrollPerSegment));
-                
-                if (distance < 0.5) {
-                    panel.classList.add('active');
-                    panel.classList.remove('adjacent');
-                } else if (distance < 1.5) {
-                    panel.classList.remove('active');
-                    panel.classList.add('adjacent');
-                } else {
-                    panel.classList.remove('active', 'adjacent');
-                }
-            });
             
             // Update nav links
             navLinks.forEach((link, i) => {
@@ -1996,6 +2215,212 @@
                 isAnimating = false;
             }
         }
+        
+        // ============================================
+        // CINEMATIC TRANSITION SYSTEM
+        // Each section has its own unique entrance
+        // ============================================
+        const cinemaCurtain = document.getElementById('cinemaCurtain');
+        const cinemaDoors = document.getElementById('cinemaDoors');
+        const cinemaFlare = document.getElementById('cinemaFlare');
+        const cinemaLight = document.getElementById('cinemaLight');
+        const cinemaBlur = document.getElementById('cinemaBlur');
+        const cinemaDepthFog = document.getElementById('cinemaDepthFog');
+        const cinemaFog = document.getElementById('cinemaFog');
+        const cinemaParticles = document.getElementById('cinemaParticles');
+        
+        let lastPanel = 0;
+        let isTransitioning = false;
+        
+        // Create floating particles
+        function createParticles() {
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                particle.style.animationDelay = `${Math.random() * 8}s`;
+                particle.style.animationDuration = `${6 + Math.random() * 4}s`;
+                cinemaParticles.appendChild(particle);
+            }
+        }
+        createParticles();
+        
+        // Different transitions for each section
+        const sectionTransitions = {
+            // Hero → About: Fade through black with blur (cinematic cut)
+            1: function() {
+                cinemaBlur.classList.add('active');
+                cinemaDepthFog.classList.add('active');
+                
+                setTimeout(() => {
+                    cinemaCurtain.style.transition = 'opacity 0.4s ease-in';
+                    cinemaCurtain.classList.add('active');
+                }, 150);
+                
+                setTimeout(() => {
+                    cinemaCurtain.style.transition = 'opacity 0.5s ease-out';
+                    cinemaCurtain.classList.remove('active');
+                    cinemaBlur.classList.remove('active');
+                }, 550);
+                
+                setTimeout(() => {
+                    cinemaDepthFog.classList.remove('active');
+                    isTransitioning = false;
+                }, 900);
+            },
+            
+            // About → Platform: Zoom push forward with blur focus shift
+            2: function() {
+                cinemaBlur.classList.add('active');
+                cinemaFlare.classList.add('active');
+                cinemaLight.classList.add('active');
+                
+                setTimeout(() => {
+                    cinemaBlur.classList.remove('active');
+                    cinemaFlare.classList.remove('active');
+                }, 400);
+                
+                setTimeout(() => {
+                    cinemaLight.classList.remove('active');
+                    isTransitioning = false;
+                }, 800);
+            },
+            
+            // Platform → Strategy: Doors close with depth fog (descending)
+            3: function() {
+                cinemaDepthFog.classList.add('active');
+                cinemaDoors.classList.add('closing');
+                
+                setTimeout(() => {
+                    cinemaDoors.classList.remove('closing');
+                }, 600);
+                
+                setTimeout(() => {
+                    cinemaDepthFog.classList.remove('active');
+                    isTransitioning = false;
+                }, 900);
+            },
+            
+            // Strategy → Performance: Data glitch scan with blur
+            4: function() {
+                cinemaBlur.classList.add('active');
+                
+                // Create scan line effect
+                const scanLine = document.createElement('div');
+                scanLine.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 4px;
+                    background: linear-gradient(90deg, transparent, var(--cyan), var(--accent), transparent);
+                    z-index: 900;
+                    box-shadow: 0 0 30px var(--cyan), 0 0 60px var(--accent);
+                    animation: scanDown 0.6s ease-out forwards;
+                `;
+                document.body.appendChild(scanLine);
+                
+                // Add glitch effect to world
+                world.style.animation = 'glitchShake 0.3s ease';
+                
+                setTimeout(() => {
+                    cinemaBlur.classList.remove('active');
+                    scanLine.remove();
+                    world.style.animation = '';
+                    isTransitioning = false;
+                }, 700);
+            },
+            
+            // Performance → Team: Soft dissolve with light and blur
+            5: function() {
+                cinemaBlur.classList.add('active');
+                cinemaFog.classList.add('active');
+                cinemaFlare.style.background = 'radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%)';
+                cinemaFlare.classList.add('active');
+                
+                setTimeout(() => {
+                    cinemaBlur.classList.remove('active');
+                    cinemaFlare.classList.remove('active');
+                    cinemaFlare.style.background = '';
+                }, 500);
+                
+                setTimeout(() => {
+                    cinemaFog.classList.remove('active');
+                    isTransitioning = false;
+                }, 900);
+            },
+            
+            // Team → Contact: Elegant fade with centered flare
+            6: function() {
+                cinemaBlur.classList.add('active');
+                cinemaDepthFog.classList.add('active');
+                cinemaCurtain.style.transition = 'opacity 0.5s ease-in';
+                cinemaCurtain.classList.add('active');
+                cinemaFlare.style.background = 'radial-gradient(circle, rgba(168, 85, 247, 0.5) 0%, transparent 70%)';
+                
+                setTimeout(() => {
+                    cinemaFlare.classList.add('active');
+                }, 400);
+                
+                setTimeout(() => {
+                    cinemaCurtain.style.transition = 'opacity 0.6s ease-out';
+                    cinemaCurtain.classList.remove('active');
+                    cinemaBlur.classList.remove('active');
+                    cinemaFlare.classList.remove('active');
+                    cinemaFlare.style.background = '';
+                }, 600);
+                
+                setTimeout(() => {
+                    cinemaDepthFog.classList.remove('active');
+                    isTransitioning = false;
+                }, 1100);
+            }
+        };
+        
+        // Reverse transitions (going backwards)
+        const reverseTransitions = {
+            0: sectionTransitions[1], // About → Hero
+            1: sectionTransitions[1], // Platform → About
+            2: sectionTransitions[3], // Strategy → Platform
+            3: sectionTransitions[4], // Performance → Strategy
+            4: sectionTransitions[5], // Team → Performance
+            5: sectionTransitions[6], // Contact → Team
+        };
+        
+        // Main transition trigger
+        function triggerCinematicTransition(fromPanel, toPanel) {
+            if (isTransitioning) return;
+            isTransitioning = true;
+            
+            const goingForward = toPanel > fromPanel;
+            
+            if (goingForward && sectionTransitions[toPanel]) {
+                sectionTransitions[toPanel]();
+            } else if (!goingForward && reverseTransitions[toPanel]) {
+                reverseTransitions[toPanel]();
+            } else {
+                // Default transition - simple blur fade
+                cinemaBlur.classList.add('active');
+                cinemaDepthFog.classList.add('active');
+                setTimeout(() => {
+                    cinemaBlur.classList.remove('active');
+                    cinemaDepthFog.classList.remove('active');
+                    isTransitioning = false;
+                }, 500);
+            }
+        }
+        
+        // Watch for panel changes (works on scroll AND click)
+        function checkPanelChange() {
+            const currentPanel = Math.round(currentScroll / scrollPerSegment);
+            if (currentPanel !== lastPanel) {
+                triggerCinematicTransition(lastPanel, currentPanel);
+                lastPanel = currentPanel;
+            }
+            requestAnimationFrame(checkPanelChange);
+        }
+        checkPanelChange();
         
         function startAnimation() {
             if (!isAnimating) {
