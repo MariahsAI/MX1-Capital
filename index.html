@@ -1009,6 +1009,96 @@
             border-radius: 12px;
         }
 
+        /* Floating Metrics Cards */
+        .floating-metrics {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            padding: 2rem 0;
+        }
+
+        .metric-card {
+            background: rgba(5, 5, 8, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            animation: floatIn 0.8s ease backwards;
+        }
+
+        .metric-card:hover {
+            transform: translateX(-10px);
+            border-color: rgba(168, 85, 247, 0.3);
+            box-shadow: 0 10px 40px rgba(168, 85, 247, 0.2);
+        }
+
+        .metric-card-1 { animation-delay: 0.1s; }
+        .metric-card-2 { animation-delay: 0.2s; }
+        .metric-card-3 { animation-delay: 0.3s; }
+
+        @keyframes floatIn {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .metric-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(168, 85, 247, 0.15);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .metric-icon svg {
+            width: 24px;
+            height: 24px;
+            color: var(--accent);
+        }
+
+        .metric-value {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.5rem;
+            color: var(--text);
+            line-height: 1;
+            min-width: 100px;
+        }
+
+        .metric-label {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            letter-spacing: 0.05em;
+            flex: 1;
+        }
+
+        .metric-status {
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-dim);
+        }
+
+        .metric-status.online {
+            background: rgba(0, 229, 204, 0.15);
+            color: var(--cyan);
+        }
+
         .platform-label {
             font-size: 0.7rem;
             letter-spacing: 0.4em;
@@ -2015,13 +2105,38 @@
                         <a class="btn-cyan" data-goto="6">Request Invitation</a>
                     </div>
                     <div class="platform-visual">
-                        <div class="platform-mockup">
-                            <img src="platform-ui-1.png" alt="Fusion Autonomy Dashboard" class="active">
-                            <img src="platform-ui-2.png" alt="Fusion Autonomy Agents">
-                        </div>
-                        <div class="carousel-dots">
-                            <button class="carousel-dot active" data-slide="0" aria-label="Slide 1"></button>
-                            <button class="carousel-dot" data-slide="1" aria-label="Slide 2"></button>
+                        <div class="floating-metrics">
+                            <div class="metric-card metric-card-1">
+                                <div class="metric-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"/>
+                                        <polyline points="12 6 12 12 16 14"/>
+                                    </svg>
+                                </div>
+                                <div class="metric-value">12</div>
+                                <div class="metric-label">Active Agents</div>
+                                <div class="metric-status online">Running</div>
+                            </div>
+                            <div class="metric-card metric-card-2">
+                                <div class="metric-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                                    </svg>
+                                </div>
+                                <div class="metric-value">98.7%</div>
+                                <div class="metric-label">System Uptime</div>
+                                <div class="metric-status online">Healthy</div>
+                            </div>
+                            <div class="metric-card metric-card-3">
+                                <div class="metric-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                                    </svg>
+                                </div>
+                                <div class="metric-value">$2.4B</div>
+                                <div class="metric-label">Volume Analyzed</div>
+                                <div class="metric-status">Last 24h</div>
+                            </div>
                         </div>
                     </div>
                 </div>
