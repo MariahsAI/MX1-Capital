@@ -2232,59 +2232,16 @@
         let lastPanel = 0;
         let isTransitioning = false;
         
-        // Create floating particles
-        function createParticles() {
-            for (let i = 0; i < 30; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = `${Math.random() * 100}%`;
-                particle.style.top = `${Math.random() * 100}%`;
-                particle.style.animationDelay = `${Math.random() * 8}s`;
-                particle.style.animationDuration = `${6 + Math.random() * 4}s`;
-                cinemaParticles.appendChild(particle);
-            }
-        }
-        createParticles();
-        
         // Different transitions for each section
         const sectionTransitions = {
-            // Hero → About: Fade through black with blur (cinematic cut)
+            // Hero → About: Simple transition
             1: function() {
-                cinemaBlur.classList.add('active');
-                cinemaDepthFog.classList.add('active');
-                
-                setTimeout(() => {
-                    cinemaCurtain.style.transition = 'opacity 0.4s ease-in';
-                    cinemaCurtain.classList.add('active');
-                }, 150);
-                
-                setTimeout(() => {
-                    cinemaCurtain.style.transition = 'opacity 0.5s ease-out';
-                    cinemaCurtain.classList.remove('active');
-                    cinemaBlur.classList.remove('active');
-                }, 550);
-                
-                setTimeout(() => {
-                    cinemaDepthFog.classList.remove('active');
-                    isTransitioning = false;
-                }, 900);
+                setTimeout(() => { isTransitioning = false; }, 300);
             },
             
-            // About → Platform: Zoom push forward with blur focus shift
+            // About → Platform: Simple transition
             2: function() {
-                cinemaBlur.classList.add('active');
-                cinemaFlare.classList.add('active');
-                cinemaLight.classList.add('active');
-                
-                setTimeout(() => {
-                    cinemaBlur.classList.remove('active');
-                    cinemaFlare.classList.remove('active');
-                }, 400);
-                
-                setTimeout(() => {
-                    cinemaLight.classList.remove('active');
-                    isTransitioning = false;
-                }, 800);
+                setTimeout(() => { isTransitioning = false; }, 300);
             },
             
             // Platform → Strategy: Doors close with depth fog (descending)
@@ -2302,10 +2259,8 @@
                 }, 900);
             },
             
-            // Strategy → Performance: Data glitch scan with blur
+            // Strategy → Performance: Data glitch scan
             4: function() {
-                cinemaBlur.classList.add('active');
-                
                 // Create scan line effect
                 const scanLine = document.createElement('div');
                 scanLine.style.cssText = `
@@ -2325,35 +2280,19 @@
                 world.style.animation = 'glitchShake 0.3s ease';
                 
                 setTimeout(() => {
-                    cinemaBlur.classList.remove('active');
                     scanLine.remove();
                     world.style.animation = '';
                     isTransitioning = false;
                 }, 700);
             },
             
-            // Performance → Team: Soft dissolve with light and blur
+            // Performance → Team: Simple transition
             5: function() {
-                cinemaBlur.classList.add('active');
-                cinemaFog.classList.add('active');
-                cinemaFlare.style.background = 'radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%)';
-                cinemaFlare.classList.add('active');
-                
-                setTimeout(() => {
-                    cinemaBlur.classList.remove('active');
-                    cinemaFlare.classList.remove('active');
-                    cinemaFlare.style.background = '';
-                }, 500);
-                
-                setTimeout(() => {
-                    cinemaFog.classList.remove('active');
-                    isTransitioning = false;
-                }, 900);
+                setTimeout(() => { isTransitioning = false; }, 300);
             },
             
             // Team → Contact: Elegant fade with centered flare
             6: function() {
-                cinemaBlur.classList.add('active');
                 cinemaDepthFog.classList.add('active');
                 cinemaCurtain.style.transition = 'opacity 0.5s ease-in';
                 cinemaCurtain.classList.add('active');
@@ -2366,7 +2305,6 @@
                 setTimeout(() => {
                     cinemaCurtain.style.transition = 'opacity 0.6s ease-out';
                     cinemaCurtain.classList.remove('active');
-                    cinemaBlur.classList.remove('active');
                     cinemaFlare.classList.remove('active');
                     cinemaFlare.style.background = '';
                 }, 600);
@@ -2380,12 +2318,12 @@
         
         // Reverse transitions (going backwards)
         const reverseTransitions = {
-            0: sectionTransitions[1], // About → Hero
-            1: sectionTransitions[1], // Platform → About
-            2: sectionTransitions[3], // Strategy → Platform
-            3: sectionTransitions[4], // Performance → Strategy
-            4: sectionTransitions[5], // Team → Performance
-            5: sectionTransitions[6], // Contact → Team
+            0: sectionTransitions[1],
+            1: sectionTransitions[1],
+            2: sectionTransitions[3], // Use doors for Strategy → Platform
+            3: sectionTransitions[1],
+            4: sectionTransitions[1],
+            5: sectionTransitions[6], // Use fade for Contact → Team
         };
         
         // Main transition trigger
@@ -2400,14 +2338,8 @@
             } else if (!goingForward && reverseTransitions[toPanel]) {
                 reverseTransitions[toPanel]();
             } else {
-                // Default transition - simple blur fade
-                cinemaBlur.classList.add('active');
-                cinemaDepthFog.classList.add('active');
-                setTimeout(() => {
-                    cinemaBlur.classList.remove('active');
-                    cinemaDepthFog.classList.remove('active');
-                    isTransitioning = false;
-                }, 500);
+                // Default - no transition effect
+                setTimeout(() => { isTransitioning = false; }, 300);
             }
         }
         
