@@ -44,9 +44,10 @@
             left: 0;
             width: 100%;
             height: 100%;
-            perspective: 1800px;
+            perspective: 1200px;
             perspective-origin: 50% 50%;
             overflow: hidden;
+            background: var(--deep);
         }
 
         .world {
@@ -55,6 +56,7 @@
             height: 100%;
             transform-style: preserve-3d;
             will-change: transform;
+            transition: transform 0.05s ease-out;
         }
 
         .panel {
@@ -66,6 +68,19 @@
             justify-content: center;
             backface-visibility: hidden;
             overflow: hidden;
+            opacity: 0;
+            filter: blur(10px);
+            transition: opacity 0.8s ease, filter 0.8s ease;
+        }
+
+        .panel.active {
+            opacity: 1;
+            filter: blur(0);
+        }
+
+        .panel.adjacent {
+            opacity: 0.3;
+            filter: blur(5px);
         }
 
         .panel-content {
@@ -78,6 +93,12 @@
             position: relative;
             overflow-y: auto;
             overflow-x: hidden;
+            transform: scale(0.9);
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .panel.active .panel-content {
+            transform: scale(1);
         }
 
         /* 
@@ -88,13 +109,14 @@
                                                             ↓
                                                         [6:Contact]
         */
-        .panel[data-index="0"] { transform: translate3d(0, 0, 0); }
-        .panel[data-index="1"] { transform: translate3d(100vw, 0, 0); }
-        .panel[data-index="2"] { transform: translate3d(200vw, 0, 0); }
-        .panel[data-index="3"] { transform: translate3d(200vw, 100vh, 0); }
-        .panel[data-index="4"] { transform: translate3d(300vw, 100vh, 0); }
-        .panel[data-index="5"] { transform: translate3d(400vw, 100vh, 0); }
-        .panel[data-index="6"] { transform: translate3d(400vw, 200vh, 0); }
+        .panel[data-index="0"] { transform: translate3d(0, 0, 0); opacity: 1; filter: blur(0); }
+        .panel[data-index="0"] .panel-content { transform: scale(1); }
+        .panel[data-index="1"] { transform: translate3d(100vw, 0, -500px); }
+        .panel[data-index="2"] { transform: translate3d(200vw, 0, -500px); }
+        .panel[data-index="3"] { transform: translate3d(200vw, 100vh, -500px); }
+        .panel[data-index="4"] { transform: translate3d(300vw, 100vh, -500px); }
+        .panel[data-index="5"] { transform: translate3d(400vw, 100vh, -500px); }
+        .panel[data-index="6"] { transform: translate3d(400vw, 200vh, -500px); }
 
         /* Navigation */
         nav {
@@ -1910,16 +1932,35 @@
         }
         
         function updateWorld() {
-            currentScroll = lerp(currentScroll, targetScroll, 0.1);
+            currentScroll = lerp(currentScroll, targetScroll, 0.08);
             const pos = getPositionOnPath(currentScroll);
             
-            world.style.transform = `translate3d(${-pos.x}vw, ${-pos.y}vh, 0)`;
+            // Calculate z-depth based on transition progress
+            const transitionProgress = pos.segmentProgress;
+            const zDepth = Math.sin(transitionProgress * Math.PI) * 200;
+            
+            world.style.transform = `translate3d(${-pos.x}vw, ${-pos.y}vh, ${zDepth}px)`;
             
             const progress = currentScroll / totalScrollLength;
             progressBar.style.transform = `scaleX(${progress})`;
             
             const currentPanel = Math.round(currentScroll / scrollPerSegment);
             currentSectionEl.textContent = String(Math.min(currentPanel + 1, 7)).padStart(2, '0');
+            
+            // Update panel visibility and effects
+            document.querySelectorAll('.panel').forEach((panel, i) => {
+                const distance = Math.abs(i - (currentScroll / scrollPerSegment));
+                
+                if (distance < 0.5) {
+                    panel.classList.add('active');
+                    panel.classList.remove('adjacent');
+                } else if (distance < 1.5) {
+                    panel.classList.remove('active');
+                    panel.classList.add('adjacent');
+                } else {
+                    panel.classList.remove('active', 'adjacent');
+                }
+            });
             
             // Update nav links
             navLinks.forEach((link, i) => {
