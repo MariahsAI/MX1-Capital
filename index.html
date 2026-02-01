@@ -938,8 +938,48 @@
             padding: 5rem 3rem;
         }
 
+        .platform-video-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .platform-video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+            opacity: 0.4;
+        }
+
+        .platform-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(17, 17, 20, 0.9) 0%, rgba(17, 17, 20, 0.7) 50%, rgba(17, 17, 20, 0.8) 100%);
+            z-index: 1;
+        }
+
         .platform-content {
             flex: 0 0 380px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .platform-visual {
+            position: relative;
+            z-index: 2;
         }
 
         .platform-label {
@@ -1911,6 +1951,14 @@
             <!-- Panel 2: Platform (Fusion Autonomy) -->
             <div class="panel panel-platform" data-index="2">
                 <div class="panel-content">
+                    <!-- Video Background -->
+                    <div class="platform-video-container">
+                        <video class="platform-video" autoplay muted loop playsinline>
+                            <source src="fusion-platform-bg.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="platform-overlay"></div>
+                    
                     <div class="platform-content">
                         <p class="platform-label">Exclusive Access</p>
                         <h2 class="platform-title">FUSION AUTONOMY</h2>
