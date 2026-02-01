@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,43 +9,36 @@
     <meta name="description" content="MX1 Holdings is a multi-strategy investment firm leveraging AI, quantitative research, and disciplined risk management to generate consistent alpha across digital and traditional asset markets.">
     <meta name="keywords" content="hedge fund, quantitative trading, AI investing, algorithmic trading, asset management, machine learning, crypto trading, MX1 Holdings">
     <meta name="author" content="MX1 Holdings">
-    <meta name="robots" content="index, follow">
     
-    <!-- Open Graph / Facebook -->
+    <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://mariahsai.github.io/MX1-Capital/">
     <meta property="og:title" content="MX1 | AI-Driven Quantitative Investment Firm">
     <meta property="og:description" content="AI-driven firm combining quantitative trading, machine learning, and multi-asset strategies to deliver superior risk-adjusted returns.">
     <meta property="og:image" content="https://mariahsai.github.io/MX1-Capital/og-image.jpg">
     
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="https://mariahsai.github.io/MX1-Capital/">
-    <meta name="twitter:title" content="MX1 | AI-Driven Quantitative Investment Firm">
-    <meta name="twitter:description" content="AI-driven firm combining quantitative trading, machine learning, and multi-asset strategies to deliver superior risk-adjusted returns.">
-    <meta name="twitter:image" content="https://mariahsai.github.io/MX1-Capital/og-image.jpg">
-    
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    
-    <!-- Theme Color -->
     <meta name="theme-color" content="#050508">
     
+    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
     <style>
         :root {
             --black: #0a0a0a;
             --deep: #050508;
             --surface: #111114;
             --accent: #a855f7;
-            --accent-bright: #c084fc;
-            --accent-dim: #a855f733;
+            --accent-dim: rgba(168, 85, 247, 0.2);
             --cyan: #00e5cc;
-            --cyan-dim: #00e5cc33;
+            --cyan-dim: rgba(0, 229, 204, 0.2);
             --text: #ffffff;
             --text-dim: #888888;
-            --gold: #c9a962;
         }
 
         * {
@@ -55,67 +47,23 @@
             box-sizing: border-box;
         }
 
-        html {
-            scroll-behavior: smooth;
-        }
-
         body {
             font-family: 'Outfit', sans-serif;
             background: var(--deep);
             color: var(--text);
             overflow-x: hidden;
-            cursor: crosshair;
         }
 
-        body::before {
-            content: '';
-            position: fixed;
-            top: -50%;
-            right: -30%;
-            width: 80%;
-            height: 100%;
-            background: radial-gradient(ellipse, rgba(168,85,247,0.08) 0%, transparent 60%);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--deep);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--accent);
-        }
-
-        /* Noise Overlay */
-        .noise {
+        /* Scroll Progress */
+        .scroll-progress {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 9999;
-            opacity: 0.03;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-        }
-
-        /* Grid Background */
-        .grid-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                linear-gradient(rgba(168,85,247,0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(168,85,247,0.03) 1px, transparent 1px);
-            background-size: 60px 60px;
-            pointer-events: none;
-            z-index: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--cyan));
+            z-index: 10000;
+            transform-origin: left;
+            transform: scaleX(0);
         }
 
         /* Navigation */
@@ -124,35 +72,21 @@
             top: 0;
             left: 0;
             width: 100%;
-            padding: 2rem 4rem;
+            padding: 1.5rem 4rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             z-index: 1000;
-            background: linear-gradient(to bottom, var(--deep), transparent);
-        }
-
-        nav::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: var(--accent);
-            box-shadow: 0 0 30px var(--accent-dim);
+            background: linear-gradient(to bottom, rgba(5,5,8,0.9), transparent);
         }
 
         .logo {
             font-family: 'Bebas Neue', sans-serif;
             font-size: 2.5rem;
-            letter-spacing: 0.3em;
-            color: var(--text);
+            letter-spacing: 0.1em;
         }
 
-        .logo .logo-1 {
-            color: var(--accent);
-        }
+        .logo-1 { color: var(--accent); }
 
         .nav-links {
             display: flex;
@@ -161,44 +95,50 @@
         }
 
         .nav-links a {
-            color: var(--text-dim);
+            color: var(--text);
             text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 300;
+            font-size: 0.8rem;
             letter-spacing: 0.2em;
             text-transform: uppercase;
-            transition: all 0.3s ease;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover { color: var(--accent); }
+
+        /* ========================================
+           HORIZONTAL SCROLL CONTAINER
+           ======================================== */
+        .horizontal-section {
             position: relative;
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 1px;
-            background: var(--accent);
-            transition: width 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: var(--accent);
-        }
-
-        .nav-links a:hover::after {
             width: 100%;
+            overflow: hidden;
         }
 
-        /* Hero Section */
+        .horizontal-wrapper {
+            display: flex;
+            width: fit-content;
+        }
+
+        .h-panel {
+            width: 100vw;
+            height: 100vh;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* ========================================
+           HERO SECTION
+           ======================================== */
         .hero {
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
+            align-items: center;
             padding: 0 4rem;
             position: relative;
-            overflow: hidden;
         }
 
         .hero::before {
@@ -210,84 +150,82 @@
             height: 100%;
             background-image: url('hero-bg.jpg');
             background-size: cover;
-            background-position: center right;
-            opacity: 0.45;
-            z-index: 0;
-        }
-
-        .hero::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, var(--deep) 40%, transparent 100%);
-            z-index: 1;
+            background-position: center;
+            opacity: 0.25;
         }
 
         .hero-content {
             position: relative;
-            z-index: 10;
-            max-width: 900px;
+            z-index: 2;
+            max-width: 700px;
         }
 
         .hero-tag {
-            font-size: 0.75rem;
-            letter-spacing: 0.5em;
+            font-size: 0.8rem;
+            letter-spacing: 0.4em;
             text-transform: uppercase;
             color: var(--accent);
-            margin-bottom: 2rem;
-            opacity: 0;
-            animation: fadeSlideUp 1s ease forwards;
-            animation-delay: 0.5s;
+            margin-bottom: 1.5rem;
         }
 
         .hero h1 {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: clamp(4rem, 12vw, 10rem);
-            line-height: 0.9;
-            letter-spacing: -0.02em;
+            font-size: clamp(4rem, 10vw, 7rem);
+            line-height: 0.95;
             margin-bottom: 2rem;
-            opacity: 0;
-            animation: fadeSlideUp 1s ease forwards;
-            animation-delay: 0.7s;
         }
 
         .hero h1 .outline {
-            -webkit-text-stroke: 1px var(--text);
-            color: transparent;
-        }
-
-        .hero h1 .outline-dim {
-            -webkit-text-stroke: 1px rgba(255,255,255,0.5);
+            -webkit-text-stroke: 2px var(--text);
             color: transparent;
         }
 
         .hero h1 .accent {
             color: var(--accent);
-            text-shadow: 0 0 60px var(--accent-dim);
+            text-shadow: 0 0 80px var(--accent-dim);
         }
 
         .hero-desc {
             font-size: 1.1rem;
             font-weight: 300;
             color: var(--text-dim);
-            max-width: 500px;
+            max-width: 450px;
             line-height: 1.8;
-            margin-bottom: 3rem;
-            opacity: 0;
-            animation: fadeSlideUp 1s ease forwards;
-            animation-delay: 0.9s;
+            margin-bottom: 2.5rem;
         }
 
         .cta-group {
             display: flex;
             gap: 2rem;
             align-items: center;
-            opacity: 0;
-            animation: fadeSlideUp 1s ease forwards;
-            animation-delay: 1.1s;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: var(--black);
+            padding: 1.1rem 2.5rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 40px var(--accent-dim);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.8rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
         }
 
         .invite-badge {
@@ -299,13 +237,10 @@
             background: rgba(168, 85, 247, 0.1);
             border: 1px solid rgba(168, 85, 247, 0.3);
             border-radius: 50px;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             letter-spacing: 0.15em;
             text-transform: uppercase;
             color: var(--accent);
-            opacity: 0;
-            animation: fadeSlideUp 1s ease forwards;
-            animation-delay: 1.3s;
         }
 
         .invite-badge svg {
@@ -313,30 +248,166 @@
             height: 14px;
         }
 
-        /* Platform Section */
-        .platform {
+        /* Floating Stats */
+        .floating-stats {
+            position: absolute;
+            right: 8%;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            z-index: 2;
+        }
+
+        .live-data-label {
+            font-size: 0.65rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--cyan);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            justify-content: flex-end;
+        }
+
+        .live-data-label::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--cyan);
+            border-radius: 50%;
+            animation: pulse 2s ease infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .stat-item {
+            text-align: right;
+            padding-right: 1.5rem;
+            border-right: 2px solid var(--cyan);
             position: relative;
-            padding: 8rem 4rem;
-            overflow: hidden;
+        }
+
+        .stat-item::after {
+            content: '';
+            position: absolute;
+            right: -5px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            background: var(--cyan);
+            box-shadow: 0 0 15px var(--cyan);
+        }
+
+        .stat-value {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3rem;
+            line-height: 1;
+        }
+
+        .stat-value .plus { color: var(--cyan); }
+
+        .stat-label {
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.8);
+            margin-top: 0.4rem;
+        }
+
+        /* ========================================
+           HORIZONTAL PANELS (About, Platform)
+           ======================================== */
+        
+        /* Panel 1: About */
+        .panel-about {
+            background: var(--deep);
+            position: relative;
+        }
+
+        .panel-about::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('about-bg.jpg');
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.4);
+        }
+
+        .about-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 900px;
+            padding: 4rem;
+            background: radial-gradient(ellipse at center, rgba(5,5,8,0.9) 0%, transparent 70%);
+        }
+
+        .about-label {
+            font-size: 1rem;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+        }
+
+        .about-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+        }
+
+        .about-text {
+            font-size: 1.2rem;
+            font-weight: 300;
+            color: rgba(255,255,255,0.9);
+            line-height: 1.9;
+            margin-bottom: 2rem;
+        }
+
+        .about-cta {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.8rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            transition: all 0.3s;
+        }
+
+        .about-cta:hover {
+            background: var(--accent);
+            color: var(--black);
+        }
+
+        /* Panel 2: Platform */
+        .panel-platform {
             background: var(--surface);
+            padding: 0 6rem;
         }
 
         .platform-container {
             display: grid;
-            grid-template-columns: 1fr 1.5fr;
+            grid-template-columns: 1fr 1.3fr;
             gap: 4rem;
             align-items: center;
             max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .platform-content {
-            position: relative;
-            z-index: 2;
         }
 
         .platform-label {
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             letter-spacing: 0.4em;
             text-transform: uppercase;
             color: var(--cyan);
@@ -358,20 +429,16 @@
         .platform-title {
             font-family: 'Bebas Neue', sans-serif;
             font-size: 3.5rem;
-            letter-spacing: 0.05em;
-            margin-bottom: 1.5rem;
-            line-height: 1.1;
+            margin-bottom: 1rem;
         }
 
         .platform-subtitle {
-            font-size: 1.3rem;
-            color: var(--text);
+            font-size: 1.2rem;
             margin-bottom: 1rem;
-            font-weight: 400;
         }
 
         .platform-desc {
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 300;
             color: var(--text-dim);
             line-height: 1.8;
@@ -381,15 +448,15 @@
         .platform-features {
             display: flex;
             flex-wrap: wrap;
-            gap: 1rem;
-            margin-bottom: 2.5rem;
+            gap: 0.8rem;
+            margin-bottom: 2rem;
         }
 
         .platform-feature {
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--text-dim);
             background: rgba(0, 229, 204, 0.05);
             border: 1px solid rgba(0, 229, 204, 0.2);
@@ -406,37 +473,33 @@
         .btn-cyan {
             background: var(--cyan);
             color: var(--black);
-            padding: 1.2rem 3rem;
-            font-size: 0.85rem;
+            padding: 1.1rem 2.5rem;
+            font-size: 0.8rem;
             font-weight: 600;
             letter-spacing: 0.15em;
             text-transform: uppercase;
             text-decoration: none;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
             display: inline-block;
+            transition: all 0.3s;
         }
 
         .btn-cyan:hover {
-            box-shadow: 0 0 40px rgba(0, 229, 204, 0.3);
-            transform: translateY(-2px);
+            box-shadow: 0 0 40px var(--cyan-dim);
         }
 
         .platform-image {
-            position: relative;
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
         }
 
         .platform-image img {
             width: 100%;
-            height: auto;
             display: block;
             opacity: 0;
-            transition: opacity 0.8s ease;
+            transition: opacity 0.8s;
             position: absolute;
             top: 0;
             left: 0;
@@ -450,273 +513,76 @@
             opacity: 1;
         }
 
-        .platform-image::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(0, 229, 204, 0.1) 0%, transparent 50%);
-            pointer-events: none;
-            z-index: 1;
-        }
-
         .carousel-dots {
             display: flex;
             justify-content: center;
             gap: 0.5rem;
-            margin-top: 1rem;
+            margin-top: 1.5rem;
         }
 
         .carousel-dot {
-            width: 8px;
-            height: 8px;
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(255,255,255,0.2);
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s;
         }
 
         .carousel-dot.active {
             background: var(--cyan);
-            box-shadow: 0 0 10px var(--cyan);
+            box-shadow: 0 0 15px var(--cyan);
         }
 
-        @media (max-width: 1024px) {
-            .platform-container {
-                grid-template-columns: 1fr;
-                gap: 3rem;
-            }
-            
-            .platform-image {
-                order: -1;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .platform {
-                padding: 5rem 1.5rem;
-            }
-            
-            .platform-title {
-                font-size: 2.5rem;
-            }
-            
-            .invite-badge {
-                margin-top: 1.5rem;
-            }
-        }
-
-        .btn-primary {
-            background: var(--accent);
-            color: var(--black);
-            padding: 1.2rem 3rem;
-            font-size: 0.85rem;
-            font-weight: 600;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            text-decoration: none;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-primary::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .btn-primary:hover::before {
-            left: 100%;
-        }
-
-        .btn-primary:hover {
-            box-shadow: 0 0 40px var(--accent-dim);
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            color: var(--text-dim);
-            text-decoration: none;
-            font-size: 0.85rem;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            transition: color 0.3s ease;
-        }
-
-        .btn-secondary:hover {
-            color: var(--text);
-        }
-
-        .btn-secondary svg {
-            transition: transform 0.3s ease;
-        }
-
-        .btn-secondary:hover svg {
-            transform: translateX(5px);
-        }
-
-        /* Floating Stats */
-        .floating-stats {
-            position: absolute;
-            right: 8%;
-            top: 50%;
-            transform: translateY(-50%);
-            display: flex;
-            flex-direction: column;
-            gap: 3rem;
-            opacity: 0;
-            animation: fadeSlideLeft 1s ease forwards;
-            animation-delay: 1.3s;
-        }
-
-        .floating-stats::before {
-            content: 'LIVE DATA';
-            position: absolute;
-            top: -3rem;
-            right: 0;
-            font-size: 0.65rem;
-            letter-spacing: 0.3em;
-            color: var(--cyan);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .floating-stats::after {
-            content: '';
-            position: absolute;
-            top: -2.5rem;
-            right: 5.5rem;
-            width: 6px;
-            height: 6px;
-            background: var(--cyan);
-            border-radius: 50%;
-            animation: pulse 1.5s ease infinite;
-            box-shadow: 0 0 10px var(--cyan);
-        }
-
-        .stat-item {
-            text-align: right;
-            padding-right: 2rem;
-            border-right: 2px solid var(--accent);
-            position: relative;
-        }
-
-        .stat-item::after {
-            content: '';
-            position: absolute;
-            right: -6px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 10px;
-            height: 10px;
-            background: var(--cyan);
-            box-shadow: 0 0 20px var(--cyan);
-        }
-
-        .stat-value {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 4rem;
-            color: var(--text);
-            line-height: 1;
-        }
-
-        .stat-value .plus {
-            color: var(--accent);
-        }
-
-        .stat-label {
-            font-size: 0.75rem;
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-            color: rgba(255,255,255,0.85);
-            margin-top: 0.5rem;
-        }
-
-        /* Vertical Line */
-        .v-line {
-            position: absolute;
-            left: 4rem;
-            top: 0;
-            width: 1px;
-            height: 100%;
-            background: linear-gradient(to bottom, transparent, var(--accent), transparent);
-            opacity: 0.3;
-        }
-
-        /* Section Styling */
-        section {
+        /* ========================================
+           VERTICAL SECTIONS (Strategy, etc)
+           ======================================== */
+        .vertical-section {
             padding: 8rem 4rem;
-            position: relative;
-            z-index: 10;
         }
 
         .section-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
-            margin-bottom: 5rem;
+            margin-bottom: 4rem;
             border-bottom: 1px solid rgba(255,255,255,0.1);
             padding-bottom: 2rem;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .section-title {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 4rem;
+            font-size: 3.5rem;
             letter-spacing: 0.1em;
         }
 
         .section-num {
-            font-family: 'Bebas Neue', sans-serif;
             font-size: 1rem;
             color: var(--accent);
             letter-spacing: 0.3em;
         }
 
-        /* Strategy Section */
+        /* Strategy */
+        .strategy {
+            background: var(--deep);
+        }
+
         .strategy-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 2px;
             background: rgba(255,255,255,0.05);
+            max-width: 1400px;
+            margin: 0 auto;
         }
 
         .strategy-card {
             background: var(--surface);
-            padding: 3rem;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.5s ease;
-        }
-
-        .strategy-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: var(--accent);
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.5s ease;
-        }
-
-        .strategy-card:hover::before {
-            transform: scaleX(1);
+            padding: 2.5rem;
+            transition: all 0.4s;
         }
 
         .strategy-card:hover {
@@ -724,21 +590,21 @@
         }
 
         .strategy-icon {
-            width: 60px;
-            height: 60px;
+            width: 50px;
+            height: 50px;
             border: 1px solid var(--accent);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             color: var(--accent);
         }
 
         .strategy-card h3 {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             letter-spacing: 0.1em;
             margin-bottom: 1rem;
         }
@@ -746,11 +612,11 @@
         .strategy-card p {
             font-weight: 300;
             color: var(--text-dim);
-            line-height: 1.8;
-            font-size: 0.95rem;
+            line-height: 1.7;
+            font-size: 0.9rem;
         }
 
-        /* Performance Section */
+        /* Performance */
         .performance {
             background: var(--surface);
         }
@@ -760,21 +626,24 @@
             grid-template-columns: 1fr 1fr;
             gap: 4rem;
             align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
         }
 
         .perf-chart {
-            height: 400px;
+            height: 350px;
             position: relative;
             border: 1px solid rgba(255,255,255,0.1);
             padding: 2rem;
+            background: var(--black);
         }
 
         .chart-line {
             position: absolute;
-            bottom: 2rem;
+            bottom: 3rem;
             left: 2rem;
             right: 2rem;
-            height: 300px;
+            height: 250px;
         }
 
         .chart-svg {
@@ -788,78 +657,97 @@
             stroke-width: 2;
             stroke-dasharray: 1000;
             stroke-dashoffset: 1000;
-            animation: drawLine 3s ease forwards;
-            animation-delay: 0.5s;
+        }
+
+        .chart-path.animated {
+            animation: drawLine 2.5s ease forwards;
+        }
+
+        @keyframes drawLine {
+            to { stroke-dashoffset: 0; }
         }
 
         .chart-fill {
             fill: url(#gradient);
             opacity: 0;
-            animation: fadeIn 1s ease forwards;
-            animation-delay: 3s;
+        }
+
+        .chart-fill.animated {
+            animation: fadeIn 1s ease forwards 2s;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 0.3; }
         }
 
         .chart-labels {
             position: absolute;
-            bottom: 0;
+            bottom: 0.5rem;
             left: 2rem;
             right: 2rem;
             display: flex;
             justify-content: space-between;
             font-size: 0.7rem;
             color: var(--text-dim);
-            letter-spacing: 0.1em;
         }
 
         .perf-stats {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 3rem;
+            gap: 2.5rem;
         }
 
         .perf-stat {
-            border-left: 1px solid var(--accent);
-            padding-left: 2rem;
+            border-left: 2px solid var(--accent);
+            padding-left: 1.5rem;
         }
 
         .perf-stat-value {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 3.5rem;
+            font-size: 3rem;
             color: var(--accent);
             line-height: 1;
         }
 
         .perf-stat-label {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             letter-spacing: 0.2em;
             text-transform: uppercase;
             color: var(--text-dim);
             margin-top: 0.5rem;
         }
 
-        /* Team Section */
+        /* Team */
+        .team {
+            background: var(--deep);
+        }
+
         .team-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 2rem;
+            gap: 1.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
         }
 
         .team-card {
             position: relative;
-            overflow: hidden;
             aspect-ratio: 3/4;
             background: linear-gradient(135deg, var(--surface), var(--black));
             border: 1px solid rgba(255,255,255,0.05);
+            overflow: hidden;
+            transition: transform 0.4s;
+        }
+
+        .team-card:hover {
+            transform: translateY(-10px);
         }
 
         .team-card::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to top, var(--black), transparent);
+            inset: 0;
+            background: linear-gradient(to top, var(--black), transparent 50%);
             z-index: 1;
         }
 
@@ -867,22 +755,21 @@
             position: absolute;
             bottom: 0;
             left: 0;
-            padding: 2rem;
+            padding: 1.5rem;
             z-index: 2;
         }
 
         .team-name {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             letter-spacing: 0.1em;
         }
 
         .team-role {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             letter-spacing: 0.2em;
             text-transform: uppercase;
             color: var(--accent);
-            margin-top: 0.25rem;
         }
 
         .team-initials {
@@ -891,41 +778,41 @@
             left: 50%;
             transform: translate(-50%, -50%);
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 5rem;
+            font-size: 4rem;
             color: rgba(255,255,255,0.03);
-            letter-spacing: 0.2em;
         }
 
-        /* Contact Section */
+        /* Contact */
         .contact {
-            background: var(--black);
+            background: linear-gradient(180deg, var(--surface), var(--deep));
+            min-height: 60vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             text-align: center;
-            padding: 10rem 4rem;
         }
 
         .contact-title {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: clamp(3rem, 8vw, 6rem);
-            letter-spacing: 0.1em;
-            margin-bottom: 2rem;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            margin-bottom: 1.5rem;
         }
 
         .contact-desc {
             font-weight: 300;
             color: var(--text-dim);
-            max-width: 500px;
-            margin: 0 auto 3rem;
+            max-width: 450px;
+            margin-bottom: 2.5rem;
             line-height: 1.8;
         }
 
         .contact-email {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 2rem;
+            font-size: 1.8rem;
             color: var(--accent);
             text-decoration: none;
-            letter-spacing: 0.1em;
-            transition: all 0.3s ease;
-            display: inline-block;
+            transition: text-shadow 0.3s;
         }
 
         .contact-email:hover {
@@ -934,16 +821,17 @@
 
         /* Footer */
         footer {
-            padding: 3rem 4rem;
+            padding: 2.5rem 4rem;
             border-top: 1px solid rgba(255,255,255,0.05);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            background: var(--deep);
         }
 
         .footer-logo {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.2rem;
+            font-size: 1rem;
             letter-spacing: 0.3em;
             color: var(--text-dim);
         }
@@ -956,392 +844,35 @@
         .footer-links a {
             color: var(--text-dim);
             text-decoration: none;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             letter-spacing: 0.15em;
             text-transform: uppercase;
-            transition: color 0.3s ease;
-        }
-
-        .footer-links a:hover {
-            color: var(--accent);
-        }
-
-        /* About Section */
-        .about {
-            position: relative;
-            min-height: 500px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        .about-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('about-bg.jpg');
-            background-size: cover;
-            background-position: center;
-            filter: brightness(0.4);
-            z-index: 0;
-        }
-
-        .about-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(180deg, var(--deep) 0%, transparent 30%, transparent 70%, var(--deep) 100%);
-            z-index: 1;
-        }
-
-        .about-content {
-            position: relative;
-            z-index: 2;
-            max-width: 1200px;
-            padding: 6rem 4rem;
-            text-align: center;
-            background: radial-gradient(ellipse at center, rgba(5,5,8,0.85) 0%, rgba(5,5,8,0.4) 60%, transparent 80%);
-            border-radius: 20px;
-        }
-
-        .about-label {
-            font-size: 1rem;
-            letter-spacing: 0.4em;
-            text-transform: uppercase;
-            color: var(--accent);
-            margin-bottom: 2rem;
-        }
-
-        .about-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 6rem;
-            letter-spacing: 0.05em;
-            margin-bottom: 2rem;
-            line-height: 1.1;
-        }
-
-        .about-text {
-            font-size: 1.5rem;
-            font-weight: 400;
-            color: rgba(255,255,255,0.95);
-            line-height: 1.9;
-            max-width: 900px;
-            margin: 0 auto 3rem auto;
-        }
-
-        .about-cta {
-            display: inline-block;
-            padding: 1rem 2.5rem;
-            border: 1px solid var(--accent);
-            color: var(--accent);
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 500;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            transition: all 0.3s ease;
-        }
-
-        .about-cta:hover {
-            background: var(--accent);
-            color: var(--black);
-            box-shadow: 0 0 30px rgba(168, 85, 247, 0.3);
-        }
-
-        @media (max-width: 768px) {
-            .about {
-                min-height: 400px;
-            }
-
-            .about-content {
-                padding: 4rem 1.5rem;
-            }
-
-            .about-title {
-                font-size: 2rem;
-            }
-
-            .about-text {
-                font-size: 1rem;
-            }
-
-            .about-overlay {
-                background: linear-gradient(180deg, var(--deep) 0%, rgba(5,5,8,0.8) 50%, var(--deep) 100%);
-            }
-        }
-
-        /* Marquee */
-        .marquee {
-            overflow: hidden;
-            padding: 1.5rem 0;
-            background: linear-gradient(90deg, #7c3aed, var(--accent), #c084fc);
-            position: relative;
-        }
-
-        .marquee-content {
-            display: flex;
-            animation: marquee 30s linear infinite;
-            white-space: nowrap;
-        }
-
-        .marquee-item {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1rem;
-            letter-spacing: 0.3em;
-            color: var(--black);
-            padding: 0 3rem;
-        }
-
-        /* Animations */
-        @keyframes fadeSlideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeSlideLeft {
-            from {
-                opacity: 0;
-                transform: translate(30px, -50%);
-            }
-            to {
-                opacity: 1;
-                transform: translate(0, -50%);
-            }
-        }
-
-        @keyframes drawLine {
-            to {
-                stroke-dashoffset: 0;
-            }
-        }
-
-        @keyframes fadeIn {
-            to {
-                opacity: 0.3;
-            }
-        }
-
-        @keyframes marquee {
-            from {
-                transform: translateX(0);
-            }
-            to {
-                transform: translateX(-50%);
-            }
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.5;
-            }
-        }
-
-        .pulse {
-            animation: pulse 2s ease infinite;
         }
 
         /* Responsive */
         @media (max-width: 1200px) {
-            .floating-stats {
-                display: none;
-            }
-            .strategy-grid {
-                grid-template-columns: 1fr;
-            }
-            .perf-container {
-                grid-template-columns: 1fr;
-            }
-            .team-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
+            .floating-stats { display: none; }
+            .strategy-grid { grid-template-columns: repeat(2, 1fr); }
+            .platform-container { grid-template-columns: 1fr; }
+            .team-grid { grid-template-columns: repeat(2, 1fr); }
+            .panel-platform { padding: 0 3rem; }
         }
 
         @media (max-width: 768px) {
-            body {
-                cursor: auto;
-            }
-
-            nav {
-                padding: 1.5rem 1.5rem;
-            }
-
-            nav::before {
-                height: 3px;
-            }
-
-            .logo {
-                font-size: 2rem;
-            }
-
-            .nav-links {
-                display: none;
-            }
-
-            .hero {
-                padding: 0 1.5rem;
-                min-height: 100svh;
-                justify-content: flex-start;
-                padding-top: 8rem;
-            }
-
-            .hero-tag {
-                font-size: 0.65rem;
-                letter-spacing: 0.3em;
-                margin-bottom: 1.5rem;
-            }
-
-            .hero h1 {
-                font-size: clamp(2.8rem, 14vw, 5rem);
-                margin-bottom: 1.5rem;
-            }
-
-            .hero-desc {
-                font-size: 1rem;
-                margin-bottom: 2.5rem;
-            }
-
-            .cta-group {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 1.5rem;
-            }
-
-            .btn-primary {
-                padding: 1rem 2.5rem;
-                width: 100%;
-                text-align: center;
-            }
-
-            .v-line {
-                display: none;
-            }
-
-            .marquee-item {
-                font-size: 0.8rem;
-                padding: 0 2rem;
-            }
-
-            section {
-                padding: 4rem 1.5rem;
-            }
-
-            .section-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 0.5rem;
-                margin-bottom: 3rem;
-            }
-
-            .section-title {
-                font-size: 2.5rem;
-            }
-
-            .strategy-grid {
-                grid-template-columns: 1fr;
-                gap: 1px;
-            }
-
-            .strategy-card {
-                padding: 2rem;
-            }
-
-            .strategy-icon {
-                width: 50px;
-                height: 50px;
-                font-size: 1.2rem;
-                margin-bottom: 1.5rem;
-            }
-
-            .strategy-card h3 {
-                font-size: 1.5rem;
-            }
-
-            .perf-chart {
-                height: 300px;
-                padding: 1.5rem;
-            }
-
-            .perf-stats {
-                grid-template-columns: 1fr 1fr;
-                gap: 2rem;
-            }
-
-            .perf-stat {
-                padding-left: 1.5rem;
-            }
-
-            .perf-stat-value {
-                font-size: 2.5rem;
-            }
-
-            .team-grid {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-
-            .team-card {
-                aspect-ratio: 4/3;
-            }
-
-            .contact {
-                padding: 6rem 1.5rem;
-            }
-
-            .contact-title {
-                font-size: clamp(2rem, 10vw, 4rem);
-            }
-
-            .contact-email {
-                font-size: 1.3rem;
-                word-break: break-all;
-            }
-
-            footer {
-                flex-direction: column;
-                gap: 2rem;
-                text-align: center;
-                padding: 2rem 1.5rem;
-            }
-
-            .footer-links {
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 1.5rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .hero h1 {
-                font-size: clamp(2.2rem, 12vw, 3.5rem);
-            }
-
-            .perf-stats {
-                grid-template-columns: 1fr;
-            }
-
-            .section-title {
-                font-size: 2rem;
-            }
+            nav { padding: 1.5rem 2rem; }
+            .nav-links { display: none; }
+            .hero { padding: 0 2rem; }
+            .strategy-grid { grid-template-columns: 1fr; }
+            .perf-container { grid-template-columns: 1fr; }
+            .team-grid { grid-template-columns: 1fr; }
+            .vertical-section { padding: 5rem 2rem; }
+            footer { flex-direction: column; gap: 1.5rem; }
         }
     </style>
 </head>
 <body>
-    <div class="noise"></div>
-    <div class="grid-bg"></div>
+    <!-- Scroll Progress -->
+    <div class="scroll-progress"></div>
 
     <!-- Navigation -->
     <nav>
@@ -1356,9 +887,8 @@
         </ul>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="v-line"></div>
+    <!-- HERO (Vertical) -->
+    <section class="hero" id="hero">
         <div class="hero-content">
             <p class="hero-tag">Quantitative Excellence Since 2018</p>
             <h1>
@@ -1366,12 +896,10 @@
                 <span class="accent">ALPHA</span><br>
                 <span class="outline">GENERATION</span>
             </h1>
-            <p class="hero-desc">
-                AI-driven firm combining quantitative trading, machine learning, and multi-asset strategies to deliver superior risk-adjusted returns.
-            </p>
+            <p class="hero-desc">AI-driven firm combining quantitative trading, machine learning, and multi-asset strategies to deliver superior risk-adjusted returns.</p>
             <div class="cta-group">
                 <a href="#contact" class="btn-primary">Request Access</a>
-                <a href="#strategy" class="btn-secondary">
+                <a href="#about" class="btn-secondary">
                     Learn More
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -1387,6 +915,7 @@
             </div>
         </div>
         <div class="floating-stats">
+            <div class="live-data-label">Live Data</div>
             <div class="stat-item">
                 <div class="stat-value">$2.4<span class="plus">B</span></div>
                 <div class="stat-label">Assets Under Management</div>
@@ -1396,84 +925,73 @@
                 <div class="stat-label">Annualized Returns</div>
             </div>
             <div class="stat-item">
-                <div class="stat-value">0.87<span class="plus"></span></div>
+                <div class="stat-value">0.87</div>
                 <div class="stat-label">Sharpe Ratio</div>
             </div>
         </div>
     </section>
 
-    <!-- Marquee -->
-    <div class="marquee">
-        <div class="marquee-content">
-            <span class="marquee-item">● SYSTEMATIC TRADING</span>
-            <span class="marquee-item">● MACHINE LEARNING</span>
-            <span class="marquee-item">● QUANTITATIVE RESEARCH</span>
-            <span class="marquee-item">● ALTERNATIVE DATA</span>
-            <span class="marquee-item">● RISK MANAGEMENT</span>
-            <span class="marquee-item">● SYSTEMATIC TRADING</span>
-            <span class="marquee-item">● MACHINE LEARNING</span>
-            <span class="marquee-item">● QUANTITATIVE RESEARCH</span>
-            <span class="marquee-item">● ALTERNATIVE DATA</span>
-            <span class="marquee-item">● RISK MANAGEMENT</span>
-        </div>
-    </div>
+    <!-- HORIZONTAL SCROLL SECTION (About + Platform) -->
+    <section class="horizontal-section" id="horizontal">
+        <div class="horizontal-wrapper">
+            <!-- Panel 1: About -->
+            <div class="h-panel panel-about" id="about">
+                <div class="about-content">
+                    <p class="about-label">About MX1</p>
+                    <h2 class="about-title">BUILDING THE FUTURE OF QUANTITATIVE INVESTING</h2>
+                    <p class="about-text">MX1 Holdings is a multi-strategy investment firm leveraging AI, quantitative research, and disciplined risk management to generate consistent alpha across digital and traditional asset markets.</p>
+                    <a href="#strategy" class="about-cta">View Our Strategy</a>
+                </div>
+            </div>
 
-    <!-- About Section -->
-    <section id="about" class="about">
-        <div class="about-bg"></div>
-        <div class="about-overlay"></div>
-        <div class="about-content">
-            <p class="about-label">About MX1</p>
-            <h2 class="about-title">BUILDING THE FUTURE OF QUANTITATIVE INVESTING</h2>
-            <p class="about-text">MX1 Holdings is a multi-strategy investment firm leveraging AI, quantitative research, and disciplined risk management to generate consistent alpha across digital and traditional asset markets.</p>
-            <a href="#strategy" class="about-cta">View Our Strategy</a>
-        </div>
-    </section>
-
-    <!-- Platform Section -->
-    <section id="platform" class="platform">
-        <div class="platform-container">
-            <div class="platform-content">
-                <p class="platform-label">Exclusive Access</p>
-                <h2 class="platform-title">FUSION AUTONOMY</h2>
-                <p class="platform-subtitle">AI-Powered Trading Predictions</p>
-                <p class="platform-desc">Our proprietary crypto prediction engine combines machine learning models with real-time market analysis to deliver actionable trading signals. Available exclusively to qualified investors.</p>
-                <div class="platform-features">
-                    <div class="platform-feature">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-                        </svg>
-                        Real-time Signals
+            <!-- Panel 2: Platform -->
+            <div class="h-panel panel-platform" id="platform">
+                <div class="platform-container">
+                    <div class="platform-content">
+                        <p class="platform-label">Exclusive Access</p>
+                        <h2 class="platform-title">FUSION AUTONOMY</h2>
+                        <p class="platform-subtitle">AI-Powered Trading Predictions</p>
+                        <p class="platform-desc">Our proprietary crypto prediction engine combines machine learning models with real-time market analysis to deliver actionable trading signals.</p>
+                        <div class="platform-features">
+                            <div class="platform-feature">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                                </svg>
+                                Real-time Signals
+                            </div>
+                            <div class="platform-feature">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                                </svg>
+                                Multi-Asset
+                            </div>
+                            <div class="platform-feature">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                </svg>
+                                Invite Only
+                            </div>
+                        </div>
+                        <a href="#contact" class="btn-cyan">Request Invitation</a>
                     </div>
-                    <div class="platform-feature">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-                        </svg>
-                        Multi-Asset Coverage
-                    </div>
-                    <div class="platform-feature">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-                        </svg>
-                        Invite Only
+                    <div class="platform-image-wrapper">
+                        <div class="platform-image">
+                            <img src="platform-ui-1.png" alt="Platform" class="active">
+                            <img src="platform-ui-2.png" alt="Platform">
+                        </div>
+                        <div class="carousel-dots">
+                            <div class="carousel-dot active"></div>
+                            <div class="carousel-dot"></div>
+                        </div>
                     </div>
                 </div>
-                <a href="#contact" class="btn-cyan">Request Invitation</a>
-            </div>
-            <div class="platform-image">
-                <img src="platform-ui-1.png" alt="Fusion Autonomy Dashboard" class="active">
-                <img src="platform-ui-2.png" alt="Fusion Autonomy Agents">
-            </div>
-            <div class="carousel-dots">
-                <div class="carousel-dot active" data-index="0"></div>
-                <div class="carousel-dot" data-index="1"></div>
             </div>
         </div>
     </section>
 
-    <!-- Strategy Section -->
-    <section id="strategy">
+    <!-- STRATEGY (Vertical) -->
+    <section class="vertical-section strategy" id="strategy">
         <div class="section-header">
             <h2 class="section-title">OUR APPROACH</h2>
             <span class="section-num">01 / STRATEGY</span>
@@ -1482,38 +1000,38 @@
             <div class="strategy-card">
                 <div class="strategy-icon">Σ</div>
                 <h3>STATISTICAL ARBITRAGE</h3>
-                <p>Exploiting mean-reversion patterns across correlated securities using advanced cointegration models and real-time signal processing.</p>
+                <p>Exploiting mean-reversion patterns across correlated securities using advanced cointegration models.</p>
             </div>
             <div class="strategy-card">
                 <div class="strategy-icon">Δ</div>
                 <h3>MOMENTUM STRATEGIES</h3>
-                <p>Capturing trending behavior through adaptive momentum indicators calibrated across multiple timeframes and asset classes.</p>
+                <p>Capturing trending behavior through adaptive momentum indicators across multiple timeframes.</p>
             </div>
             <div class="strategy-card">
                 <div class="strategy-icon">Ω</div>
                 <h3>MARKET MAKING</h3>
-                <p>Providing liquidity across global exchanges while maintaining tight risk controls and microsecond execution capabilities.</p>
+                <p>Providing liquidity across global exchanges with tight risk controls and microsecond execution.</p>
             </div>
             <div class="strategy-card">
                 <div class="strategy-icon">∞</div>
                 <h3>MACHINE LEARNING</h3>
-                <p>Deploying deep learning architectures for pattern recognition in alternative data sources including satellite imagery and NLP signals.</p>
+                <p>Deep learning architectures for pattern recognition in alternative data sources.</p>
             </div>
             <div class="strategy-card">
                 <div class="strategy-icon">λ</div>
                 <h3>OPTIONS VOLATILITY</h3>
-                <p>Trading implied versus realized volatility spreads using proprietary surface modeling and Greeks optimization.</p>
+                <p>Trading implied versus realized volatility spreads using proprietary surface modeling.</p>
             </div>
             <div class="strategy-card">
                 <div class="strategy-icon">∂</div>
                 <h3>GLOBAL MACRO</h3>
-                <p>Systematic allocation across FX, rates, and commodities based on quantitative macroeconomic factor models.</p>
+                <p>Systematic allocation across FX, rates, and commodities based on factor models.</p>
             </div>
         </div>
     </section>
 
-    <!-- Performance Section -->
-    <section id="performance" class="performance">
+    <!-- PERFORMANCE (Vertical) -->
+    <section class="vertical-section performance" id="performance">
         <div class="section-header">
             <h2 class="section-title">TRACK RECORD</h2>
             <span class="section-num">02 / PERFORMANCE</span>
@@ -1560,8 +1078,8 @@
         </div>
     </section>
 
-    <!-- Team Section -->
-    <section id="team">
+    <!-- TEAM (Vertical) -->
+    <section class="vertical-section team" id="team">
         <div class="section-header">
             <h2 class="section-title">LEADERSHIP</h2>
             <span class="section-num">03 / TEAM</span>
@@ -1598,11 +1116,11 @@
         </div>
     </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="contact">
+    <!-- CONTACT (Vertical) -->
+    <section class="vertical-section contact" id="contact">
         <h2 class="contact-title">LET'S BUILD<br>ALPHA TOGETHER</h2>
-        <p class="contact-desc">Accredited investors and institutional allocators are invited to request our detailed performance materials and strategy documentation.</p>
-        <a href="/cdn-cgi/l/email-protection#026b70426f7a336163726b76636e2c616d6f" class="contact-email"><span class="__cf_email__" data-cfemail="034a51434e5b324042534a57424f2d404c4e">[email&#160;protected]</span></a>
+        <p class="contact-desc">Accredited investors and institutional allocators are invited to request our detailed performance materials.</p>
+        <a href="mailto:ir@mx1capital.com" class="contact-email">IR@MX1CAPITAL.COM</a>
     </section>
 
     <!-- Footer -->
@@ -1615,77 +1133,258 @@
         </div>
     </footer>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-        // Intersection Observer for scroll animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -100px 0px'
-        };
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.strategy-card, .team-card, .perf-stat').forEach(el => {
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(30px)';
-            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-            observer.observe(el);
-        });
-
-        // Smooth scroll for navigation
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        // Parallax effect on scroll
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const heroContent = document.querySelector('.hero-content');
-            if (heroContent) {
-                heroContent.style.transform = `translateY(${scrolled * 0.3}px)`;
-                heroContent.style.opacity = 1 - (scrolled * 0.002);
+        // Scroll Progress Bar
+        gsap.to('.scroll-progress', {
+            scaleX: 1,
+            ease: 'none',
+            scrollTrigger: {
+                trigger: 'body',
+                start: 'top top',
+                end: 'bottom bottom',
+                scrub: true
             }
         });
 
-        // Platform carousel
+        // ==========================================
+        // HORIZONTAL SCROLL - Scroll down, move right
+        // ==========================================
+        const horizontalSection = document.querySelector('.horizontal-section');
+        const horizontalWrapper = document.querySelector('.horizontal-wrapper');
+        const panels = gsap.utils.toArray('.h-panel');
+
+        // Calculate total width
+        const totalWidth = panels.length * window.innerWidth;
+
+        // Pin the section and scroll horizontally
+        gsap.to(horizontalWrapper, {
+            x: () => -(totalWidth - window.innerWidth),
+            ease: 'none',
+            scrollTrigger: {
+                trigger: horizontalSection,
+                start: 'top top',
+                end: () => `+=${totalWidth}`,
+                scrub: 1,
+                pin: true,
+                anticipatePin: 1
+            }
+        });
+
+        // ==========================================
+        // HERO PARALLAX - Content moves out
+        // ==========================================
+        gsap.to('.hero-content', {
+            y: -150,
+            opacity: 0,
+            ease: 'none',
+            scrollTrigger: {
+                trigger: '.hero',
+                start: 'top top',
+                end: 'bottom top',
+                scrub: true
+            }
+        });
+
+        gsap.to('.floating-stats', {
+            y: -100,
+            opacity: 0,
+            ease: 'none',
+            scrollTrigger: {
+                trigger: '.hero',
+                start: 'top top',
+                end: 'bottom top',
+                scrub: true
+            }
+        });
+
+        // ==========================================
+        // ABOUT CONTENT - Animate in during horizontal scroll
+        // ==========================================
+        gsap.fromTo('.about-content', 
+            { 
+                x: 200, 
+                opacity: 0,
+                rotateY: -30,
+                transformPerspective: 1500
+            },
+            { 
+                x: 0, 
+                opacity: 1,
+                rotateY: 0,
+                ease: 'power2.out',
+                scrollTrigger: {
+                    trigger: '.panel-about',
+                    containerAnimation: gsap.getById && gsap.getById('horizontal') || null,
+                    start: 'left center',
+                    end: 'center center',
+                    scrub: 1,
+                    // Use the horizontal section as container
+                    scroller: horizontalSection.scrollTrigger ? undefined : window
+                }
+            }
+        );
+
+        // ==========================================
+        // PLATFORM - Animate in
+        // ==========================================
+        gsap.fromTo('.platform-content', 
+            { x: -100, opacity: 0 },
+            { 
+                x: 0, 
+                opacity: 1,
+                scrollTrigger: {
+                    trigger: '.panel-platform',
+                    start: 'top 80%',
+                    end: 'top 30%',
+                    scrub: 1
+                }
+            }
+        );
+
+        gsap.fromTo('.platform-image', 
+            { 
+                x: 200, 
+                rotateY: -20,
+                opacity: 0,
+                transformPerspective: 1500
+            },
+            { 
+                x: 0, 
+                rotateY: 0,
+                opacity: 1,
+                scrollTrigger: {
+                    trigger: '.panel-platform',
+                    start: 'top 70%',
+                    end: 'top 20%',
+                    scrub: 1
+                }
+            }
+        );
+
+        // ==========================================
+        // STRATEGY CARDS
+        // ==========================================
+        gsap.fromTo('.strategy-card', 
+            { 
+                y: 100, 
+                rotateX: 20,
+                opacity: 0,
+                transformPerspective: 1000
+            },
+            { 
+                y: 0, 
+                rotateX: 0,
+                opacity: 1,
+                stagger: 0.1,
+                scrollTrigger: {
+                    trigger: '.strategy-grid',
+                    start: 'top 80%',
+                    end: 'top 30%',
+                    scrub: 1
+                }
+            }
+        );
+
+        // ==========================================
+        // PERFORMANCE
+        // ==========================================
+        ScrollTrigger.create({
+            trigger: '.perf-chart',
+            start: 'top 70%',
+            onEnter: () => {
+                document.querySelector('.chart-path').classList.add('animated');
+                document.querySelector('.chart-fill').classList.add('animated');
+            }
+        });
+
+        gsap.fromTo('.perf-stat', 
+            { x: 50, opacity: 0 },
+            { 
+                x: 0, 
+                opacity: 1,
+                stagger: 0.1,
+                scrollTrigger: {
+                    trigger: '.perf-stats',
+                    start: 'top 80%',
+                    end: 'top 40%',
+                    scrub: 1
+                }
+            }
+        );
+
+        // ==========================================
+        // TEAM CARDS
+        // ==========================================
+        gsap.fromTo('.team-card', 
+            { 
+                y: 100, 
+                rotateY: 20,
+                opacity: 0,
+                transformPerspective: 1000
+            },
+            { 
+                y: 0, 
+                rotateY: 0,
+                opacity: 1,
+                stagger: 0.1,
+                scrollTrigger: {
+                    trigger: '.team-grid',
+                    start: 'top 80%',
+                    end: 'top 30%',
+                    scrub: 1
+                }
+            }
+        );
+
+        // ==========================================
+        // CONTACT
+        // ==========================================
+        gsap.fromTo('.contact-title', 
+            { y: 80, opacity: 0 },
+            { 
+                y: 0, 
+                opacity: 1,
+                scrollTrigger: {
+                    trigger: '.contact',
+                    start: 'top 80%',
+                    end: 'top 50%',
+                    scrub: 1
+                }
+            }
+        );
+
+        // ==========================================
+        // CAROUSEL
+        // ==========================================
         const platformImages = document.querySelectorAll('.platform-image img');
         const carouselDots = document.querySelectorAll('.carousel-dot');
         let currentSlide = 0;
 
         function showSlide(index) {
-            platformImages.forEach((img, i) => {
-                img.classList.toggle('active', i === index);
-            });
-            carouselDots.forEach((dot, i) => {
-                dot.classList.toggle('active', i === index);
-            });
+            platformImages.forEach((img, i) => img.classList.toggle('active', i === index));
+            carouselDots.forEach((dot, i) => dot.classList.toggle('active', i === index));
             currentSlide = index;
         }
 
-        // Auto-rotate every 4 seconds
         setInterval(() => {
-            const nextSlide = (currentSlide + 1) % platformImages.length;
-            showSlide(nextSlide);
+            showSlide((currentSlide + 1) % platformImages.length);
         }, 4000);
 
-        // Click on dots to change slide
-        carouselDots.forEach((dot, index) => {
-            dot.addEventListener('click', () => showSlide(index));
+        carouselDots.forEach((dot, i) => {
+            dot.addEventListener('click', () => showSlide(i));
+        });
+
+        // Smooth scroll for nav
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
         });
     </script>
 </body>
