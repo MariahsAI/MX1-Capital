@@ -2863,6 +2863,13 @@
             const currentPanel = Math.round(currentScroll / scrollPerSegment);
             if (currentPanel === 1) {
                 startAboutAnimation();
+                // Auto-unmute when entering About section
+                if (muteBtn.classList.contains('muted')) {
+                    muteBtn.classList.remove('muted');
+                    allVideos.forEach(video => {
+                        video.muted = false;
+                    });
+                }
             } else {
                 resetAboutAnimation();
             }
