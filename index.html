@@ -2993,6 +2993,14 @@
                     });
                 }
             } else {
+                // Left slide 2 - mute audio
+                if (wasOnSlide2) {
+                    muteBtn.classList.add('muted');
+                    allVideos.forEach(video => {
+                        video.muted = true;
+                    });
+                    hasUnmutedOnSlide2 = false; // Reset so it unmutes again when returning
+                }
                 wasOnSlide2 = false;
                 resetAboutAnimation();
             }
