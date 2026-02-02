@@ -1615,9 +1615,9 @@
         
         .panel-strategy .panel-content {
             flex-direction: column;
-            align-items: stretch;
-            justify-content: center;
-            padding: 5rem 3rem;
+            align-items: flex-start;
+            justify-content: flex-end;
+            padding: 3rem;
         }
 
         .strategy-video-container {
@@ -1638,7 +1638,7 @@
             height: 100%;
             transform: translate(-50%, -50%);
             object-fit: cover;
-            opacity: 0.5;
+            opacity: 0.8;
         }
 
         .strategy-overlay {
@@ -1647,51 +1647,18 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(180deg, rgba(5,5,8,0.7) 0%, rgba(5,5,8,0.5) 50%, rgba(5,5,8,0.7) 100%);
+            background: linear-gradient(180deg, rgba(5,5,8,0.3) 0%, transparent 50%, rgba(5,5,8,0.5) 100%);
             z-index: 1;
         }
 
-        .section-header {
+        .strategy-label {
             position: relative;
             z-index: 2;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding-bottom: 1.25rem;
-        }
-
-        .section-title {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            letter-spacing: 0.1em;
-        }
-
-        .section-num {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 0.9rem;
-            color: var(--accent);
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
             letter-spacing: 0.3em;
-        }
-
-        .strategy-grid {
-            position: relative;
-            z-index: 2;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2px;
-            background: rgba(255,255,255,0.05);
-        }
-
-        .strategy-card {
-            background: rgba(17, 17, 20, 0.8);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            padding: 1.5rem;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.5s ease;
+            color: var(--text);
+            text-shadow: 0 2px 20px rgba(0,0,0,0.8);
         }
 
         .strategy-card::before {
@@ -2668,42 +2635,7 @@
                     </div>
                     <div class="strategy-overlay"></div>
                     
-                    <div class="section-header">
-                        <h2 class="section-title">OUR APPROACH</h2>
-                        <span class="section-num">01 / STRATEGY</span>
-                    </div>
-                    <div class="strategy-grid">
-                        <div class="strategy-card">
-                            <div class="strategy-icon">Σ</div>
-                            <h3>STATISTICAL ARBITRAGE</h3>
-                            <p>Exploiting mean-reversion patterns across correlated securities using advanced cointegration models.</p>
-                        </div>
-                        <div class="strategy-card">
-                            <div class="strategy-icon">Δ</div>
-                            <h3>MOMENTUM STRATEGIES</h3>
-                            <p>Capturing trending behavior through adaptive momentum indicators across multiple timeframes.</p>
-                        </div>
-                        <div class="strategy-card">
-                            <div class="strategy-icon">Ω</div>
-                            <h3>MARKET MAKING</h3>
-                            <p>Providing liquidity across global exchanges while maintaining tight risk controls.</p>
-                        </div>
-                        <div class="strategy-card">
-                            <div class="strategy-icon">∞</div>
-                            <h3>MACHINE LEARNING</h3>
-                            <p>Deploying deep learning architectures for pattern recognition in alternative data sources.</p>
-                        </div>
-                        <div class="strategy-card">
-                            <div class="strategy-icon">λ</div>
-                            <h3>OPTIONS VOLATILITY</h3>
-                            <p>Trading implied versus realized volatility spreads using proprietary surface modeling.</p>
-                        </div>
-                        <div class="strategy-card">
-                            <div class="strategy-icon">∂</div>
-                            <h3>GLOBAL MACRO</h3>
-                            <p>Systematic allocation across FX, rates, and commodities based on factor models.</p>
-                        </div>
-                    </div>
+                    <div class="strategy-label">OUR APPROACH</div>
                 </div>
             </div>
 
