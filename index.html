@@ -495,6 +495,50 @@
             transform: scaleX(0);
         }
 
+        /* Mute Button */
+        .mute-btn {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            width: 48px;
+            height: 48px;
+            background: rgba(5, 5, 8, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .mute-btn:hover {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: var(--accent);
+            transform: scale(1.05);
+        }
+
+        .mute-btn svg {
+            width: 20px;
+            height: 20px;
+            color: var(--text);
+        }
+
+        .mute-btn .mute-icon-off {
+            display: none;
+        }
+
+        .mute-btn.muted .mute-icon-on {
+            display: none;
+        }
+
+        .mute-btn.muted .mute-icon-off {
+            display: block;
+        }
+
         /* Section counter */
         .section-counter {
             position: fixed;
@@ -2047,6 +2091,19 @@
 <body>
     <div class="progress-bar" id="progressBar"></div>
 
+    <!-- Audio Mute Button -->
+    <button class="mute-btn" id="muteBtn" aria-label="Mute audio">
+        <svg class="mute-icon-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+        </svg>
+        <svg class="mute-icon-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+            <line x1="23" y1="9" x2="17" y2="15"/>
+            <line x1="17" y1="9" x2="23" y2="15"/>
+        </svg>
+    </button>
+
     <!-- Cinematic Transition System -->
     <div class="cinema-curtain" id="cinemaCurtain"></div>
     <div class="cinema-doors" id="cinemaDoors">
@@ -2122,7 +2179,7 @@
                 <div class="panel-content">
                     <!-- Video Background -->
                     <div class="hero-video-container">
-                        <video class="hero-video" autoplay muted loop playsinline>
+                        <video class="hero-video" autoplay loop playsinline id="heroVideo">
                             <source src="fusion-bg.mp4" type="video/mp4">
                         </video>
                     </div>
@@ -2195,7 +2252,7 @@
             <div class="panel panel-about" data-index="1">
                 <div class="panel-content">
                     <div class="about-video-container">
-                        <video class="about-video" autoplay muted loop playsinline>
+                        <video class="about-video" autoplay loop playsinline id="aboutVideo">
                             <source src="about-bg.mp4" type="video/mp4">
                         </video>
                     </div>
@@ -2214,7 +2271,7 @@
                 <div class="panel-content">
                     <!-- Video Background -->
                     <div class="platform-video-container">
-                        <video class="platform-video" autoplay muted loop playsinline>
+                        <video class="platform-video" autoplay loop playsinline id="platformVideo">
                             <source src="fusion-autonomy.mp4" type="video/mp4">
                         </video>
                     </div>
@@ -2577,7 +2634,6 @@
         const cinemaBlur = document.getElementById('cinemaBlur');
         const cinemaDepthFog = document.getElementById('cinemaDepthFog');
         const cinemaFog = document.getElementById('cinemaFog');
-        const cinemaParticles = document.getElementById('cinemaParticles');
         
         let lastPanel = 0;
         let isTransitioning = false;
@@ -2594,7 +2650,7 @@
                 setTimeout(() => { isTransitioning = false; }, 300);
             },
             
-            // Platform → Strategy: Doors close with depth fog (descending)
+            // Platform → Strategy: Doors close with depth fog
             3: function() {
                 cinemaDepthFog.classList.add('active');
                 cinemaDoors.classList.add('closing');
@@ -2611,7 +2667,6 @@
             
             // Strategy → Performance: Data glitch scan
             4: function() {
-                // Create scan line effect
                 const scanLine = document.createElement('div');
                 scanLine.style.cssText = `
                     position: fixed;
@@ -2626,7 +2681,6 @@
                 `;
                 document.body.appendChild(scanLine);
                 
-                // Add glitch effect to world
                 world.style.animation = 'glitchShake 0.3s ease';
                 
                 setTimeout(() => {
@@ -2641,7 +2695,7 @@
                 setTimeout(() => { isTransitioning = false; }, 300);
             },
             
-            // Team → Contact: Elegant fade with centered flare
+            // Team → Contact: Elegant fade with flare
             6: function() {
                 cinemaDepthFog.classList.add('active');
                 cinemaCurtain.style.transition = 'opacity 0.5s ease-in';
@@ -2666,14 +2720,14 @@
             }
         };
         
-        // Reverse transitions (going backwards)
+        // Reverse transitions
         const reverseTransitions = {
             0: sectionTransitions[1],
             1: sectionTransitions[1],
-            2: sectionTransitions[3], // Use doors for Strategy → Platform
+            2: sectionTransitions[3],
             3: sectionTransitions[1],
             4: sectionTransitions[1],
-            5: sectionTransitions[6], // Use fade for Contact → Team
+            5: sectionTransitions[6],
         };
         
         // Main transition trigger
@@ -2722,6 +2776,30 @@
         if (aboutVideo) {
             aboutVideo.playbackRate = 0.5;
         }
+        
+        // Mute button functionality
+        const muteBtn = document.getElementById('muteBtn');
+        const heroVideo = document.getElementById('heroVideo');
+        const aboutVid = document.getElementById('aboutVideo');
+        const platformVideo = document.getElementById('platformVideo');
+        const allVideos = [heroVideo, aboutVid, platformVideo].filter(v => v);
+        
+        // Try to autoplay with sound (browsers may block this)
+        allVideos.forEach(video => {
+            video.play().catch(() => {
+                // If autoplay with sound fails, mute and try again
+                video.muted = true;
+                muteBtn.classList.add('muted');
+                video.play();
+            });
+        });
+        
+        muteBtn.addEventListener('click', () => {
+            const isMuted = muteBtn.classList.toggle('muted');
+            allVideos.forEach(video => {
+                video.muted = isMuted;
+            });
+        });
         
         // Close mobile menu when clicking a link
         mobileMenuLinks.forEach(link => {
