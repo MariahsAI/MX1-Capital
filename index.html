@@ -2897,15 +2897,12 @@
         const platformVideo = document.getElementById('platformVideo');
         const allVideos = [heroVideo, aboutVid, platformVideo].filter(v => v);
         
-        // Try to autoplay with sound (browsers may block this)
+        // Start muted so videos can autoplay
         allVideos.forEach(video => {
-            video.play().catch(() => {
-                // If autoplay with sound fails, mute and try again
-                video.muted = true;
-                muteBtn.classList.add('muted');
-                video.play();
-            });
+            video.muted = true;
+            video.play().catch(err => console.log('Video play error:', err));
         });
+        muteBtn.classList.add('muted');
         
         muteBtn.addEventListener('click', () => {
             const isMuted = muteBtn.classList.toggle('muted');
