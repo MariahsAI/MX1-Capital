@@ -2863,6 +2863,10 @@
             const currentPanel = Math.round(currentScroll / scrollPerSegment);
             if (currentPanel === 1) {
                 startAboutAnimation();
+                // Make sure about video is playing
+                if (aboutVid && aboutVid.paused) {
+                    aboutVid.play().catch(err => console.log('About video play error:', err));
+                }
                 // Auto-unmute when entering About section
                 if (muteBtn.classList.contains('muted')) {
                     muteBtn.classList.remove('muted');
