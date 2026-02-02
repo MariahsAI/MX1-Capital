@@ -680,13 +680,13 @@
         .mute-btn {
             position: fixed;
             bottom: 2rem;
-            left: 2rem;
+            right: 6rem;
             width: 48px;
             height: 48px;
             background: rgba(5, 5, 8, 0.8);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
             border-radius: 50%;
             cursor: pointer;
             z-index: 1000;
@@ -705,7 +705,7 @@
         .mute-btn svg {
             width: 20px;
             height: 20px;
-            color: var(--text);
+            color: var(--accent);
         }
 
         .mute-btn .mute-icon-off {
@@ -750,13 +750,13 @@
             font-size: 0.65rem;
             letter-spacing: 0.3em;
             text-transform: uppercase;
-            color: var(--text-dim);
+            color: var(--accent);
         }
 
         .direction-hint .arrow {
             width: 36px;
             height: 36px;
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid rgba(168, 85, 247, 0.5);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -767,7 +767,7 @@
         .direction-hint .arrow svg {
             width: 14px;
             height: 14px;
-            stroke: var(--text-dim);
+            stroke: var(--accent);
         }
 
         .direction-hint[data-direction="right"] .arrow { transform: rotate(0deg); }
