@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -2231,7 +2232,7 @@
                 <div class="panel-content">
                     <!-- Video Background -->
                     <div class="hero-video-container">
-                        <video class="hero-video" autoplay muted loop playsinline id="heroVideo">
+                        <video class="hero-video" autoplay loop playsinline id="heroVideo">
                             <source src="fusion-bg.mp4" type="video/mp4">
                         </video>
                     </div>
@@ -2304,7 +2305,7 @@
             <div class="panel panel-about" data-index="1">
                 <div class="panel-content">
                     <div class="about-video-container">
-                        <video class="about-video" autoplay muted loop playsinline id="aboutVideo">
+                        <video class="about-video" autoplay loop playsinline id="aboutVideo">
                             <source src="about-bg.mp4" type="video/mp4">
                         </video>
                     </div>
@@ -2324,7 +2325,7 @@
                 <div class="panel-content">
                     <!-- Video Background -->
                     <div class="platform-video-container">
-                        <video class="platform-video" autoplay muted loop playsinline id="platformVideo">
+                        <video class="platform-video" autoplay loop playsinline id="platformVideo">
                             <source src="fusion-autonomy.mp4" type="video/mp4">
                         </video>
                     </div>
@@ -2863,10 +2864,6 @@
             const currentPanel = Math.round(currentScroll / scrollPerSegment);
             if (currentPanel === 1) {
                 startAboutAnimation();
-                // Make sure about video is playing
-                if (aboutVid && aboutVid.paused) {
-                    aboutVid.play().catch(err => console.log('About video play error:', err));
-                }
                 // Auto-unmute when entering About section
                 if (muteBtn.classList.contains('muted')) {
                     muteBtn.classList.remove('muted');
@@ -2901,12 +2898,15 @@
         const platformVideo = document.getElementById('platformVideo');
         const allVideos = [heroVideo, aboutVid, platformVideo].filter(v => v);
         
-        // Start muted so videos can autoplay
+        // Try to autoplay with sound (browsers may block this)
         allVideos.forEach(video => {
-            video.muted = true;
-            video.play().catch(err => console.log('Video play error:', err));
+            video.play().catch(() => {
+                // If autoplay with sound fails, mute and try again
+                video.muted = true;
+                muteBtn.classList.add('muted');
+                video.play();
+            });
         });
-        muteBtn.classList.add('muted');
         
         muteBtn.addEventListener('click', () => {
             const isMuted = muteBtn.classList.toggle('muted');
