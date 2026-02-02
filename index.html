@@ -1620,7 +1620,40 @@
             padding: 5rem 3rem;
         }
 
+        .strategy-video-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .strategy-video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+            opacity: 0.5;
+        }
+
+        .strategy-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, rgba(5,5,8,0.7) 0%, rgba(5,5,8,0.5) 50%, rgba(5,5,8,0.7) 100%);
+            z-index: 1;
+        }
+
         .section-header {
+            position: relative;
+            z-index: 2;
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
@@ -1643,6 +1676,8 @@
         }
 
         .strategy-grid {
+            position: relative;
+            z-index: 2;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 2px;
@@ -1650,7 +1685,9 @@
         }
 
         .strategy-card {
-            background: var(--surface);
+            background: rgba(17, 17, 20, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             padding: 1.5rem;
             position: relative;
             overflow: hidden;
@@ -2623,6 +2660,14 @@
             <!-- Panel 3: Strategy -->
             <div class="panel panel-strategy" data-index="3">
                 <div class="panel-content">
+                    <!-- Video Background -->
+                    <div class="strategy-video-container">
+                        <video class="strategy-video" autoplay muted loop playsinline id="strategyVideo">
+                            <source src="strategy-bg.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="strategy-overlay"></div>
+                    
                     <div class="section-header">
                         <h2 class="section-title">OUR APPROACH</h2>
                         <span class="section-num">01 / STRATEGY</span>
@@ -3067,13 +3112,14 @@
         }
         
         // Watch for entering/leaving about section
-        let hasUnmutedOnSlide2 = false;
         let wasOnSlide2 = false;
+        let wasOnSlide4 = false;
         
-        function checkAboutSection() {
+        function checkAudioSections() {
             const currentPanel = Math.round(currentScroll / scrollPerSegment);
+            
+            // Slide 2 (About) - index 1
             if (currentPanel === 1) {
-                // Just entered slide 2
                 if (!wasOnSlide2) {
                     wasOnSlide2 = true;
                     // Restart video from beginning
@@ -3081,8 +3127,7 @@
                         aboutVid.currentTime = 0;
                         aboutVid.play().catch(err => console.log('About video play error:', err));
                     }
-                    
-                    // Auto-unmute when entering About section (only if user clicked Enter)
+                    // Auto-unmute
                     if (userHasInteracted && muteBtn.classList.contains('muted')) {
                         muteBtn.classList.remove('muted');
                         allVideos.forEach(video => {
@@ -3090,17 +3135,13 @@
                         });
                     }
                 }
-                
                 startAboutAnimation();
-                
             } else {
-                // Left slide 2 - mute audio and pause about video
                 if (wasOnSlide2) {
                     muteBtn.classList.add('muted');
                     allVideos.forEach(video => {
                         video.muted = true;
                     });
-                    // Also pause the about video
                     if (aboutVid) {
                         aboutVid.pause();
                     }
@@ -3108,9 +3149,40 @@
                 wasOnSlide2 = false;
                 resetAboutAnimation();
             }
-            requestAnimationFrame(checkAboutSection);
+            
+            // Slide 4 (Strategy) - index 3
+            if (currentPanel === 3) {
+                if (!wasOnSlide4) {
+                    wasOnSlide4 = true;
+                    // Restart video from beginning
+                    if (strategyVideo) {
+                        strategyVideo.currentTime = 0;
+                        strategyVideo.play().catch(err => console.log('Strategy video play error:', err));
+                    }
+                    // Auto-unmute
+                    if (userHasInteracted && muteBtn.classList.contains('muted')) {
+                        muteBtn.classList.remove('muted');
+                        allVideos.forEach(video => {
+                            video.muted = false;
+                        });
+                    }
+                }
+            } else {
+                if (wasOnSlide4) {
+                    muteBtn.classList.add('muted');
+                    allVideos.forEach(video => {
+                        video.muted = true;
+                    });
+                    if (strategyVideo) {
+                        strategyVideo.pause();
+                    }
+                }
+                wasOnSlide4 = false;
+            }
+            
+            requestAnimationFrame(checkAudioSections);
         }
-        checkAboutSection();
+        checkAudioSections();
         
         function startAnimation() {
             if (!isAnimating) {
@@ -3130,7 +3202,8 @@
         const heroVideo = document.getElementById('heroVideo');
         const aboutVid = document.getElementById('aboutVideo');
         const platformVideo = document.getElementById('platformVideo');
-        const allVideos = [heroVideo, aboutVid, platformVideo].filter(v => v);
+        const strategyVideo = document.getElementById('strategyVideo');
+        const allVideos = [heroVideo, aboutVid, platformVideo, strategyVideo].filter(v => v);
         let userHasInteracted = false;
         
         // Start muted so videos can autoplay
