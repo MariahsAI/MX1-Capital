@@ -36,6 +36,99 @@
             box-sizing: border-box;
         }
 
+        /* Splash Screen */
+        .splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--deep);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        .splash-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .splash-content {
+            text-align: center;
+        }
+
+        .splash-logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(4rem, 15vw, 8rem);
+            letter-spacing: 0.2em;
+            color: var(--text);
+            text-shadow: 0 0 30px rgba(255,255,255,0.3);
+            margin-bottom: 0.5rem;
+        }
+
+        .splash-logo span {
+            color: var(--accent);
+        }
+
+        .splash-tagline {
+            font-size: 0.85rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            margin-bottom: 3rem;
+        }
+
+        .splash-enter {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2.5rem;
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--text);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 0.3em;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .splash-enter::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--accent);
+            transition: left 0.4s ease;
+            z-index: -1;
+        }
+
+        .splash-enter:hover::before {
+            left: 0;
+        }
+
+        .splash-enter:hover {
+            color: var(--deep);
+        }
+
+        .splash-enter svg {
+            width: 18px;
+            height: 18px;
+            transition: transform 0.3s ease;
+        }
+
+        .splash-enter:hover svg {
+            transform: translateX(5px);
+        }
+
         html, body {
             height: 100%;
             overflow: hidden;
@@ -2141,6 +2234,20 @@
     </style>
 </head>
 <body>
+    <!-- Splash Screen -->
+    <div class="splash-screen" id="splashScreen">
+        <div class="splash-content">
+            <div class="splash-logo">MX<span>1</span></div>
+            <p class="splash-tagline">AI-Driven Quantitative Investment</p>
+            <button class="splash-enter" id="splashEnter">
+                <span>ENTER</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
     <div class="progress-bar" id="progressBar"></div>
 
     <!-- Audio Mute Button -->
@@ -2859,6 +2966,8 @@
         }
         
         // Watch for entering/leaving about section
+        let hasUnmutedOnSlide2 = false;
+        
         function checkAboutSection() {
             const currentPanel = Math.round(currentScroll / scrollPerSegment);
             if (currentPanel === 1) {
@@ -2866,6 +2975,14 @@
                 // Make sure about video is playing
                 if (aboutVid && aboutVid.paused) {
                     aboutVid.play().catch(err => console.log('About video play error:', err));
+                }
+                // Auto-unmute when entering About section (only if user clicked Enter)
+                if (userHasInteracted && !hasUnmutedOnSlide2 && muteBtn.classList.contains('muted')) {
+                    hasUnmutedOnSlide2 = true;
+                    muteBtn.classList.remove('muted');
+                    allVideos.forEach(video => {
+                        video.muted = false;
+                    });
                 }
             } else {
                 resetAboutAnimation();
@@ -2893,6 +3010,7 @@
         const aboutVid = document.getElementById('aboutVideo');
         const platformVideo = document.getElementById('platformVideo');
         const allVideos = [heroVideo, aboutVid, platformVideo].filter(v => v);
+        let userHasInteracted = false;
         
         // Start muted so videos can autoplay
         allVideos.forEach(video => {
@@ -2900,6 +3018,20 @@
             video.play().catch(err => console.log('Video play error:', err));
         });
         muteBtn.classList.add('muted');
+        
+        // Splash screen - enables audio capability on enter
+        const splashScreen = document.getElementById('splashScreen');
+        const splashEnter = document.getElementById('splashEnter');
+        
+        splashEnter.addEventListener('click', () => {
+            // Hide splash
+            splashScreen.classList.add('hidden');
+            
+            // Mark that user has interacted (audio can now be enabled)
+            userHasInteracted = true;
+            
+            // Keep muted for now - will unmute on slide 2
+        });
         
         muteBtn.addEventListener('click', () => {
             const isMuted = muteBtn.classList.toggle('muted');
