@@ -2967,15 +2967,23 @@
         
         // Watch for entering/leaving about section
         let hasUnmutedOnSlide2 = false;
+        let wasOnSlide2 = false;
         
         function checkAboutSection() {
             const currentPanel = Math.round(currentScroll / scrollPerSegment);
             if (currentPanel === 1) {
-                startAboutAnimation();
-                // Make sure about video is playing
-                if (aboutVid && aboutVid.paused) {
-                    aboutVid.play().catch(err => console.log('About video play error:', err));
+                // Just entered slide 2
+                if (!wasOnSlide2) {
+                    wasOnSlide2 = true;
+                    // Restart video from beginning
+                    if (aboutVid) {
+                        aboutVid.currentTime = 0;
+                        aboutVid.play().catch(err => console.log('About video play error:', err));
+                    }
                 }
+                
+                startAboutAnimation();
+                
                 // Auto-unmute when entering About section (only if user clicked Enter)
                 if (userHasInteracted && !hasUnmutedOnSlide2 && muteBtn.classList.contains('muted')) {
                     hasUnmutedOnSlide2 = true;
@@ -2985,6 +2993,7 @@
                     });
                 }
             } else {
+                wasOnSlide2 = false;
                 resetAboutAnimation();
             }
             requestAnimationFrame(checkAboutSection);
