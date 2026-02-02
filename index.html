@@ -916,7 +916,7 @@
             height: 100%;
             transform: translate(-50%, -50%);
             object-fit: contain;
-            opacity: 0.85;
+            opacity: 0.9;
         }
 
         .about-video-container {
@@ -936,69 +936,84 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(180deg, rgba(5,5,8,0.2) 0%, transparent 30%, transparent 70%, rgba(5,5,8,0.2) 100%);
+            background: linear-gradient(180deg, rgba(5,5,8,0.4) 0%, transparent 25%, transparent 60%, rgba(5,5,8,0.8) 100%);
             z-index: 1;
         }
 
         .panel-about .panel-content {
             flex-direction: column;
             text-align: center;
-            justify-content: center;
+            justify-content: flex-end;
             align-items: center;
+            padding-bottom: 6rem;
         }
 
-        /* Glassmorphic About Cards */
-        .about-card {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(5, 5, 8, 0.6);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 3rem 4rem;
-            max-width: 800px;
+        /* Cinematic Text Styling */
+        .about-cinematic {
+            position: relative;
             z-index: 10;
-            opacity: 0;
-            transition: opacity 0.8s ease;
-        }
-
-        .about-card.visible {
-            opacity: 1;
-        }
-
-        .about-card-1 {
-            opacity: 1;
+            max-width: 900px;
+            padding: 0 2rem;
         }
 
         .about-label {
-            font-size: 0.9rem;
-            letter-spacing: 0.4em;
+            font-size: 0.85rem;
+            letter-spacing: 0.5em;
             text-transform: uppercase;
             color: var(--accent);
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease;
+        }
+
+        .about-label.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .about-title {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: clamp(2rem, 5vw, 4rem);
-            letter-spacing: 0.05em;
-            line-height: 1.1;
+            font-size: clamp(1.75rem, 5vw, 3.5rem);
+            letter-spacing: 0.08em;
+            line-height: 1.15;
             color: var(--text);
+            text-shadow: 0 2px 20px rgba(0,0,0,0.8), 0 4px 40px rgba(0,0,0,0.5);
+            margin-bottom: 1.5rem;
+            min-height: 2.5em;
         }
 
-        .about-card-2 {
-            padding: 2.5rem 3.5rem;
-            max-width: 700px;
+        .about-title .cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1em;
+            background: var(--accent);
+            margin-left: 4px;
+            animation: blink 0.8s infinite;
+            vertical-align: middle;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
         }
 
         .about-text {
-            font-size: 1.15rem;
+            font-size: 1.05rem;
             font-weight: 300;
-            color: rgba(255,255,255,0.9);
-            line-height: 1.9;
+            color: rgba(255,255,255,0.85);
+            line-height: 1.8;
+            max-width: 650px;
+            margin: 0 auto;
+            text-shadow: 0 2px 15px rgba(0,0,0,0.8);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease 0.3s;
+        }
+
+        .about-text.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         /* ============================================
@@ -1829,34 +1844,32 @@
             }
             
             /* About */
-            .about-card {
-                padding: 2rem 1.5rem;
-                max-width: 90%;
-                width: 90%;
-            }
-            
-            .about-card-2 {
-                padding: 2rem 1.5rem;
-                max-width: 90%;
+            .about-cinematic {
+                padding: 0 1.25rem;
             }
             
             .about-label {
-                font-size: 0.75rem;
-                margin-bottom: 1rem;
+                font-size: 0.7rem;
+                letter-spacing: 0.4em;
             }
             
             .about-title {
-                font-size: clamp(1.5rem, 6vw, 2rem);
+                font-size: clamp(1.4rem, 5vw, 1.8rem);
+                letter-spacing: 0.05em;
             }
             
             .about-text {
-                font-size: 0.95rem;
+                font-size: 0.9rem;
                 line-height: 1.7;
             }
             
             .about-video {
                 object-fit: cover;
                 object-position: center 30%;
+            }
+            
+            .panel-about .panel-content {
+                padding-bottom: 5rem;
             }
             
             /* Platform */
@@ -2297,15 +2310,11 @@
                     </div>
                     <div class="about-overlay"></div>
                     
-                    <!-- Section 1: Title Card -->
-                    <div class="about-card about-card-1" id="aboutCard1">
-                        <p class="about-label">About MX1</p>
-                        <h2 class="about-title">BUILDING THE FUTURE OF QUANTITATIVE INVESTING</h2>
-                    </div>
-                    
-                    <!-- Section 2: Description Card -->
-                    <div class="about-card about-card-2" id="aboutCard2">
-                        <p class="about-text">MX1 Capital is a multi-strategy investment firm leveraging AI, quantitative research, and disciplined risk management to generate consistent alpha across digital and traditional asset markets.</p>
+                    <!-- Cinematic Text -->
+                    <div class="about-cinematic">
+                        <p class="about-label" id="aboutLabel">ABOUT MX1</p>
+                        <h2 class="about-title" id="aboutTitle"></h2>
+                        <p class="about-text" id="aboutText">MX1 Capital is a multi-strategy investment firm leveraging AI, quantitative research, and disciplined risk management to generate consistent alpha across digital and traditional asset markets.</p>
                     </div>
                 </div>
             </div>
@@ -2802,33 +2811,51 @@
         }
         checkPanelChange();
         
-        // About section card fade animation
-        const aboutCard1 = document.getElementById('aboutCard1');
-        const aboutCard2 = document.getElementById('aboutCard2');
+        // About section cinematic typewriter animation
+        const aboutLabel = document.getElementById('aboutLabel');
+        const aboutTitle = document.getElementById('aboutTitle');
+        const aboutText = document.getElementById('aboutText');
+        const titleText = "BUILDING THE FUTURE OF QUANTITATIVE INVESTING";
         let aboutAnimationStarted = false;
-        let aboutAnimationTimer = null;
+        let typewriterInterval = null;
         
         function startAboutAnimation() {
             if (aboutAnimationStarted) return;
             aboutAnimationStarted = true;
             
-            // Card 1 is already visible, wait then fade it out and show card 2
-            aboutAnimationTimer = setTimeout(() => {
-                aboutCard1.classList.remove('visible');
-                aboutCard1.style.opacity = '0';
+            // Fade in label
+            setTimeout(() => {
+                aboutLabel.classList.add('visible');
+            }, 300);
+            
+            // Start typewriter after label appears
+            setTimeout(() => {
+                let i = 0;
+                aboutTitle.innerHTML = '<span class="cursor"></span>';
                 
-                setTimeout(() => {
-                    aboutCard2.classList.add('visible');
-                }, 400);
-            }, 3000); // Show first card for 3 seconds
+                typewriterInterval = setInterval(() => {
+                    if (i < titleText.length) {
+                        aboutTitle.innerHTML = titleText.substring(0, i + 1) + '<span class="cursor"></span>';
+                        i++;
+                    } else {
+                        clearInterval(typewriterInterval);
+                        // Remove cursor after typing done
+                        setTimeout(() => {
+                            aboutTitle.innerHTML = titleText;
+                            // Fade in description
+                            aboutText.classList.add('visible');
+                        }, 500);
+                    }
+                }, 50);
+            }, 800);
         }
         
         function resetAboutAnimation() {
             aboutAnimationStarted = false;
-            if (aboutAnimationTimer) clearTimeout(aboutAnimationTimer);
-            aboutCard1.style.opacity = '1';
-            aboutCard1.classList.add('visible');
-            aboutCard2.classList.remove('visible');
+            if (typewriterInterval) clearInterval(typewriterInterval);
+            aboutLabel.classList.remove('visible');
+            aboutTitle.innerHTML = '';
+            aboutText.classList.remove('visible');
         }
         
         // Watch for entering/leaving about section
