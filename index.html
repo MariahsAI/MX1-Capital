@@ -2867,13 +2867,6 @@
                 if (aboutVid && aboutVid.paused) {
                     aboutVid.play().catch(err => console.log('About video play error:', err));
                 }
-                // Auto-unmute when entering About section
-                if (muteBtn.classList.contains('muted')) {
-                    muteBtn.classList.remove('muted');
-                    allVideos.forEach(video => {
-                        video.muted = false;
-                    });
-                }
             } else {
                 resetAboutAnimation();
             }
