@@ -3081,26 +3081,29 @@
                         aboutVid.currentTime = 0;
                         aboutVid.play().catch(err => console.log('About video play error:', err));
                     }
+                    
+                    // Auto-unmute when entering About section (only if user clicked Enter)
+                    if (userHasInteracted && muteBtn.classList.contains('muted')) {
+                        muteBtn.classList.remove('muted');
+                        allVideos.forEach(video => {
+                            video.muted = false;
+                        });
+                    }
                 }
                 
                 startAboutAnimation();
                 
-                // Auto-unmute when entering About section (only if user clicked Enter)
-                if (userHasInteracted && !hasUnmutedOnSlide2 && muteBtn.classList.contains('muted')) {
-                    hasUnmutedOnSlide2 = true;
-                    muteBtn.classList.remove('muted');
-                    allVideos.forEach(video => {
-                        video.muted = false;
-                    });
-                }
             } else {
-                // Left slide 2 - mute audio
+                // Left slide 2 - mute audio and pause about video
                 if (wasOnSlide2) {
                     muteBtn.classList.add('muted');
                     allVideos.forEach(video => {
                         video.muted = true;
                     });
-                    hasUnmutedOnSlide2 = false; // Reset so it unmutes again when returning
+                    // Also pause the about video
+                    if (aboutVid) {
+                        aboutVid.pause();
+                    }
                 }
                 wasOnSlide2 = false;
                 resetAboutAnimation();
