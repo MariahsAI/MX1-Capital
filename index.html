@@ -64,6 +64,14 @@
             pointer-events: none;
         }
 
+        .splash-video-desktop {
+            display: block;
+        }
+
+        .splash-video-mobile {
+            display: none;
+        }
+
         .splash-overlay {
             position: absolute;
             top: 0;
@@ -1898,12 +1906,13 @@
                 background: var(--deep);
             }
             
-            .splash-video {
-                width: 100%;
-                height: auto;
-                max-height: 60vh;
-                top: 40%;
-                object-fit: contain;
+            .splash-video-desktop {
+                display: none;
+            }
+            
+            .splash-video-mobile {
+                display: block;
+                object-fit: cover;
                 object-position: center center;
             }
             
@@ -2284,8 +2293,11 @@
 <body>
     <!-- Splash Screen -->
     <div class="splash-screen" id="splashScreen">
-        <video class="splash-video" autoplay muted loop playsinline>
+        <video class="splash-video splash-video-desktop" autoplay muted loop playsinline>
             <source src="splash-bg.mp4" type="video/mp4">
+        </video>
+        <video class="splash-video splash-video-mobile" autoplay muted loop playsinline>
+            <source src="splash-bg-mobile.mp4" type="video/mp4">
         </video>
         <div class="splash-overlay"></div>
         <button class="splash-enter" id="splashEnter">
