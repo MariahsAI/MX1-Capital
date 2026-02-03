@@ -3033,78 +3033,56 @@
             });
         });
         
-        // Watch for entering/leaving about section
-        let wasOnSlide2 = false;
-        let wasOnSlide4 = false;
+        // Watch for entering/leaving audio sections
+        let lastAudioPanel = -1;
         
         function checkAudioSections() {
             const currentPanel = Math.round(currentScroll / scrollPerSegment);
             
-            // Slide 2 (About) - index 1
-            if (currentPanel === 1) {
-                if (!wasOnSlide2) {
-                    wasOnSlide2 = true;
-                    // Restart video from beginning
+            // Only trigger when panel actually changes
+            if (currentPanel !== lastAudioPanel) {
+                
+                // Leaving previous panel - mute/pause its video
+                if (lastAudioPanel === 1 && aboutVid) {
+                    aboutVid.pause();
+                    aboutVid.muted = true;
+                }
+                if (lastAudioPanel === 3 && strategyVideo) {
+                    strategyVideo.pause();
+                    strategyVideo.muted = true;
+                }
+                
+                // Entering new panel - play/unmute its video
+                if (currentPanel === 1) {
                     if (aboutVid) {
                         aboutVid.currentTime = 0;
                         aboutVid.play().catch(err => console.log('About video play error:', err));
+                        if (userHasInteracted) {
+                            aboutVid.muted = false;
+                            muteBtn.classList.remove('muted');
+                        }
                     }
-                    // Pause strategy video
-                    if (strategyVideo) {
-                        strategyVideo.pause();
-                        strategyVideo.muted = true;
-                    }
-                    // Auto-unmute about video only
-                    if (userHasInteracted) {
-                        aboutVid.muted = false;
-                        muteBtn.classList.remove('muted');
-                    }
-                }
-                startAboutAnimation();
-            } else {
-                if (wasOnSlide2) {
-                    if (aboutVid) {
-                        aboutVid.pause();
-                        aboutVid.muted = true;
-                    }
-                }
-                wasOnSlide2 = false;
-                resetAboutAnimation();
-            }
-            
-            // Slide 4 (Strategy) - index 3
-            if (currentPanel === 3) {
-                if (!wasOnSlide4) {
-                    wasOnSlide4 = true;
-                    // Restart video from beginning
+                    startAboutAnimation();
+                } else if (currentPanel === 3) {
                     if (strategyVideo) {
                         strategyVideo.currentTime = 0;
                         strategyVideo.play().catch(err => console.log('Strategy video play error:', err));
+                        if (userHasInteracted) {
+                            strategyVideo.muted = false;
+                            muteBtn.classList.remove('muted');
+                        }
                     }
-                    // Pause about video
-                    if (aboutVid) {
-                        aboutVid.pause();
-                        aboutVid.muted = true;
-                    }
-                    // Auto-unmute strategy video only
-                    if (userHasInteracted) {
-                        strategyVideo.muted = false;
-                        muteBtn.classList.remove('muted');
-                    }
+                } else {
+                    // Not on audio slide - make sure mute button shows muted
+                    muteBtn.classList.add('muted');
                 }
-            } else {
-                if (wasOnSlide4) {
-                    if (strategyVideo) {
-                        strategyVideo.pause();
-                        strategyVideo.muted = true;
-                    }
+                
+                // Reset about animation when leaving slide 2
+                if (lastAudioPanel === 1 && currentPanel !== 1) {
+                    resetAboutAnimation();
                 }
-                wasOnSlide4 = false;
-            }
-            
-            // If not on slide 2 or 4, mute everything
-            if (currentPanel !== 1 && currentPanel !== 3) {
-                muteBtn.classList.add('muted');
+                
+                lastAudioPanel = currentPanel;
             }
             
             requestAnimationFrame(checkAudioSections);
