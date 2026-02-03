@@ -2981,6 +2981,41 @@
             aboutText.classList.remove('visible');
         }
         
+        // Mute button functionality - must be defined before checkAudioSections
+        const muteBtn = document.getElementById('muteBtn');
+        const heroVideo = document.getElementById('heroVideo');
+        const aboutVid = document.getElementById('aboutVideo');
+        const platformVideo = document.getElementById('platformVideo');
+        const strategyVideo = document.getElementById('strategyVideo');
+        const allVideos = [heroVideo, aboutVid, platformVideo, strategyVideo].filter(v => v);
+        let userHasInteracted = false;
+        
+        // Start muted so videos can autoplay
+        allVideos.forEach(video => {
+            video.muted = true;
+            video.play().catch(err => console.log('Video play error:', err));
+        });
+        muteBtn.classList.add('muted');
+        
+        // Splash screen - enables audio capability on enter
+        const splashScreen = document.getElementById('splashScreen');
+        const splashEnter = document.getElementById('splashEnter');
+        
+        splashEnter.addEventListener('click', () => {
+            // Hide splash
+            splashScreen.classList.add('hidden');
+            
+            // Mark that user has interacted (audio can now be enabled)
+            userHasInteracted = true;
+        });
+        
+        muteBtn.addEventListener('click', () => {
+            const isMuted = muteBtn.classList.toggle('muted');
+            allVideos.forEach(video => {
+                video.muted = isMuted;
+            });
+        });
+        
         // Watch for entering/leaving about section
         let wasOnSlide2 = false;
         let wasOnSlide4 = false;
@@ -3072,44 +3107,15 @@
             mobileMenu.classList.toggle('active');
         });
         
-        // Mute button functionality
-        const muteBtn = document.getElementById('muteBtn');
-        const heroVideo = document.getElementById('heroVideo');
-        const aboutVid = document.getElementById('aboutVideo');
-        const platformVideo = document.getElementById('platformVideo');
-        const strategyVideo = document.getElementById('strategyVideo');
-        const allVideos = [heroVideo, aboutVid, platformVideo, strategyVideo].filter(v => v);
-        let userHasInteracted = false;
-        
-        // Start muted so videos can autoplay
-        allVideos.forEach(video => {
-            video.muted = true;
-            video.play().catch(err => console.log('Video play error:', err));
-        });
-        muteBtn.classList.add('muted');
-        
-        // Splash screen - enables audio capability on enter
-        const splashScreen = document.getElementById('splashScreen');
-        const splashEnter = document.getElementById('splashEnter');
-        
-        splashEnter.addEventListener('click', () => {
-            // Hide splash
-            splashScreen.classList.add('hidden');
-            
-            // Mark that user has interacted (audio can now be enabled)
-            userHasInteracted = true;
-            
-            // Keep muted for now - will unmute on slide 2
-        });
-        
-        muteBtn.addEventListener('click', () => {
-            const isMuted = muteBtn.classList.toggle('muted');
-            allVideos.forEach(video => {
-                video.muted = isMuted;
+        // Close mobile menu when clicking a link
+        mobileMenuLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                mobileMenu.classList.remove('active');
             });
         });
         
-        // Close mobile menu when clicking a link
+        // Wheel/trackpad
         mobileMenuLinks.forEach(link => {
             link.addEventListener('click', () => {
                 hamburger.classList.remove('active');
