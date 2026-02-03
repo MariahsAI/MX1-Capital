@@ -1894,11 +1894,16 @@
             
             /* Splash Screen Mobile */
             .splash-screen {
-                padding-bottom: 2rem;
+                padding-bottom: 1rem;
+                background: var(--deep);
             }
             
             .splash-video {
-                object-fit: cover;
+                width: 100%;
+                height: auto;
+                max-height: 60vh;
+                top: 40%;
+                object-fit: contain;
                 object-position: center center;
             }
             
@@ -2284,7 +2289,7 @@
         </video>
         <div class="splash-overlay"></div>
         <button class="splash-enter" id="splashEnter">
-            <span>ENTER</span>
+            <span>ENTER MX1</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M5 12h14M12 5l7 7-7 7"/>
             </svg>
