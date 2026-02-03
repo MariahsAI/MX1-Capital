@@ -56,8 +56,8 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 100%;
-            height: 100%;
+            width: 120%;
+            height: 120%;
             transform: translate(-50%, -50%);
             object-fit: cover;
             opacity: 0.8;
@@ -3042,23 +3042,23 @@
                         aboutVid.currentTime = 0;
                         aboutVid.play().catch(err => console.log('About video play error:', err));
                     }
-                    // Auto-unmute
-                    if (userHasInteracted && muteBtn.classList.contains('muted')) {
+                    // Pause strategy video
+                    if (strategyVideo) {
+                        strategyVideo.pause();
+                        strategyVideo.muted = true;
+                    }
+                    // Auto-unmute about video only
+                    if (userHasInteracted) {
+                        aboutVid.muted = false;
                         muteBtn.classList.remove('muted');
-                        allVideos.forEach(video => {
-                            video.muted = false;
-                        });
                     }
                 }
                 startAboutAnimation();
             } else {
                 if (wasOnSlide2) {
-                    muteBtn.classList.add('muted');
-                    allVideos.forEach(video => {
-                        video.muted = true;
-                    });
                     if (aboutVid) {
                         aboutVid.pause();
+                        aboutVid.muted = true;
                     }
                 }
                 wasOnSlide2 = false;
@@ -3074,25 +3074,30 @@
                         strategyVideo.currentTime = 0;
                         strategyVideo.play().catch(err => console.log('Strategy video play error:', err));
                     }
-                    // Auto-unmute
-                    if (userHasInteracted && muteBtn.classList.contains('muted')) {
+                    // Pause about video
+                    if (aboutVid) {
+                        aboutVid.pause();
+                        aboutVid.muted = true;
+                    }
+                    // Auto-unmute strategy video only
+                    if (userHasInteracted) {
+                        strategyVideo.muted = false;
                         muteBtn.classList.remove('muted');
-                        allVideos.forEach(video => {
-                            video.muted = false;
-                        });
                     }
                 }
             } else {
                 if (wasOnSlide4) {
-                    muteBtn.classList.add('muted');
-                    allVideos.forEach(video => {
-                        video.muted = true;
-                    });
                     if (strategyVideo) {
                         strategyVideo.pause();
+                        strategyVideo.muted = true;
                     }
                 }
                 wasOnSlide4 = false;
+            }
+            
+            // If not on slide 2 or 4, mute everything
+            if (currentPanel !== 1 && currentPanel !== 3) {
+                muteBtn.classList.add('muted');
             }
             
             requestAnimationFrame(checkAudioSections);
