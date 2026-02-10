@@ -1117,10 +1117,12 @@
         }
 
         .trade-now-btn {
+            position: absolute;
+            bottom: 3rem;
+            left: 3rem;
             display: inline-flex;
             align-items: center;
             gap: 0.75rem;
-            margin-top: 1rem;
             padding: 1rem 2rem;
             background: transparent;
             border: 1px solid var(--accent);
@@ -1131,10 +1133,29 @@
             text-decoration: none;
             cursor: pointer;
             transition: all 0.4s ease;
-            position: relative;
             overflow: hidden;
             opacity: 0;
             transform: translateY(20px);
+            z-index: 10;
+            animation: flashPulse 2s ease-in-out infinite;
+            animation-play-state: paused;
+        }
+
+        .trade-now-btn.visible {
+            opacity: 1;
+            transform: translateY(0);
+            animation-play-state: running;
+        }
+
+        @keyframes flashPulse {
+            0%, 100% {
+                box-shadow: 0 0 5px var(--accent), 0 0 10px var(--accent);
+                border-color: var(--accent);
+            }
+            50% {
+                box-shadow: 0 0 20px var(--accent), 0 0 40px var(--accent), 0 0 60px var(--accent);
+                border-color: var(--accent-bright);
+            }
         }
 
         .trade-now-btn.visible {
@@ -2538,13 +2559,15 @@
                         <p class="about-label" id="aboutLabel">ABOUT MX1</p>
                         <h2 class="about-title" id="aboutTitle"></h2>
                         <p class="about-text" id="aboutText">MX1 Capital is a multi-strategy investment firm leveraging AI, quantitative research, and disciplined risk management to generate consistent alpha across digital and traditional asset markets.</p>
-                        <a href="#" class="trade-now-btn" id="tradeNowBtn">
-                            <span>TRADE NOW</span>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M5 12h14M12 5l7 7-7 7"/>
-                            </svg>
-                        </a>
                     </div>
+                    
+                    <!-- Trade Now Button -->
+                    <a href="#" class="trade-now-btn" id="tradeNowBtn">
+                        <span>TRADE NOW</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
                 </div>
             </div>
 
