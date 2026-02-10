@@ -1116,6 +1116,62 @@
             transform: translateY(0);
         }
 
+        .trade-now-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+            padding: 1rem 2rem;
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--text);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 0.2em;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .trade-now-btn.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .trade-now-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--accent);
+            transition: left 0.4s ease;
+            z-index: -1;
+        }
+
+        .trade-now-btn:hover::before {
+            left: 0;
+        }
+
+        .trade-now-btn:hover {
+            color: var(--deep);
+        }
+
+        .trade-now-btn svg {
+            width: 18px;
+            height: 18px;
+            transition: transform 0.3s ease;
+        }
+
+        .trade-now-btn:hover svg {
+            transform: translateX(5px);
+        }
+
         /* ============================================
            PLATFORM SECTION (Fusion Autonomy)
            ============================================ */
@@ -2482,6 +2538,12 @@
                         <p class="about-label" id="aboutLabel">ABOUT MX1</p>
                         <h2 class="about-title" id="aboutTitle"></h2>
                         <p class="about-text" id="aboutText">MX1 Capital is a multi-strategy investment firm leveraging AI, quantitative research, and disciplined risk management to generate consistent alpha across digital and traditional asset markets.</p>
+                        <a href="#" class="trade-now-btn" id="tradeNowBtn">
+                            <span>TRADE NOW</span>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -2984,6 +3046,11 @@
                             aboutTitle.innerHTML = titleText;
                             // Fade in description
                             aboutText.classList.add('visible');
+                            // Fade in trade now button
+                            setTimeout(() => {
+                                const tradeBtn = document.getElementById('tradeNowBtn');
+                                if (tradeBtn) tradeBtn.classList.add('visible');
+                            }, 400);
                         }, 500);
                     }
                 }, 50);
@@ -2996,6 +3063,8 @@
             aboutLabel.classList.remove('visible');
             aboutTitle.innerHTML = '';
             aboutText.classList.remove('visible');
+            const tradeBtn = document.getElementById('tradeNowBtn');
+            if (tradeBtn) tradeBtn.classList.remove('visible');
         }
         
         // Mute button functionality - must be defined before checkAudioSections
