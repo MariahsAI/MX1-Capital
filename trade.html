@@ -192,6 +192,49 @@
             height: 18px;
         }
 
+        .mute-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 48px;
+            height: 48px;
+            background: rgba(5, 5, 8, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .mute-btn:hover {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: var(--accent);
+            transform: scale(1.05);
+        }
+
+        .mute-btn svg {
+            width: 20px;
+            height: 20px;
+            color: var(--accent);
+        }
+
+        .mute-btn .mute-icon-off {
+            display: none;
+        }
+
+        .mute-btn.muted .mute-icon-on {
+            display: none;
+        }
+
+        .mute-btn.muted .mute-icon-off {
+            display: block;
+        }
+
         @media (max-width: 768px) {
             .trade-content {
                 padding: 1.5rem;
@@ -209,12 +252,24 @@
                 top: 1rem;
                 left: 1rem;
             }
+
+            .mute-btn {
+                bottom: 1.5rem;
+                right: 1rem;
+                width: 40px;
+                height: 40px;
+            }
+
+            .mute-btn svg {
+                width: 16px;
+                height: 16px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="trade-page">
-        <video class="trade-video" autoplay muted loop playsinline>
+        <video class="trade-video" autoplay muted loop playsinline id="tradeVideo">
             <source src="trade-bg.mp4" type="video/mp4">
         </video>
         <div class="trade-overlay"></div>
@@ -225,6 +280,19 @@
             </svg>
             BACK
         </a>
+
+        <!-- Mute Button -->
+        <button class="mute-btn" id="muteBtn" aria-label="Mute audio">
+            <svg class="mute-icon-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+            </svg>
+            <svg class="mute-icon-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+                <line x1="23" y1="9" x2="17" y2="15"/>
+                <line x1="17" y1="9" x2="23" y2="15"/>
+            </svg>
+        </button>
 
         <div class="trade-content">
             <div class="trade-logo">MX<span>1</span></div>
@@ -239,5 +307,22 @@
             </form>
         </div>
     </div>
+
+    <script>
+        const tradeVideo = document.getElementById('tradeVideo');
+        const muteBtn = document.getElementById('muteBtn');
+        
+        // Auto-unmute after a short delay (user came from main site, so interaction happened)
+        setTimeout(() => {
+            tradeVideo.muted = false;
+            muteBtn.classList.remove('muted');
+        }, 500);
+        
+        // Mute button toggle
+        muteBtn.addEventListener('click', () => {
+            const isMuted = muteBtn.classList.toggle('muted');
+            tradeVideo.muted = isMuted;
+        });
+    </script>
 </body>
 </html>
