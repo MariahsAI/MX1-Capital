@@ -3318,4 +3318,13 @@
             currentSlide = index;
         }
         
-        setInterval(() => showSlide((currentSlide + 1) % plat
+        setInterval(() => showSlide((currentSlide + 1) % platformImages.length), 4000);
+        carouselDots.forEach((dot, i) => dot.addEventListener("click", (e) => {
+            e.stopPropagation();
+            showSlide(i);
+        }));
+        
+        updateWorld();
+    </script>
+</body>
+</html>
