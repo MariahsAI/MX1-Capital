@@ -313,32 +313,9 @@
         const muteBtn = document.getElementById('muteBtn');
         const tradeForm = document.getElementById('tradeForm');
         
-        // Try to unmute - if it fails, wait for user interaction
-        function tryUnmute() {
-            tradeVideo.muted = false;
-            tradeVideo.play().then(() => {
-                muteBtn.classList.remove('muted');
-            }).catch(() => {
-                // Autoplay with sound blocked, keep muted
-                tradeVideo.muted = true;
-                muteBtn.classList.add('muted');
-            });
-        }
-        
-        // Try after short delay
-        setTimeout(tryUnmute, 500);
-        
-        // Also try on first touch/click anywhere
-        function enableAudioOnInteraction() {
-            tradeVideo.muted = false;
-            tradeVideo.play();
-            muteBtn.classList.remove('muted');
-            document.removeEventListener('touchstart', enableAudioOnInteraction);
-            document.removeEventListener('click', enableAudioOnInteraction);
-        }
-        
-        document.addEventListener('touchstart', enableAudioOnInteraction, { once: true });
-        document.addEventListener('click', enableAudioOnInteraction, { once: true });
+        // Unmute immediately - user already interacted by clicking TRADE NOW
+        tradeVideo.muted = false;
+        muteBtn.classList.remove('muted');
         
         // Mute button toggle
         muteBtn.addEventListener('click', (e) => {
@@ -350,7 +327,6 @@
         // Form submission - redirect to trading platform
         tradeForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            // Redirect to trading platform
             window.location.href = 'http://47.131.13.248/';
         });
     </script>
