@@ -1166,11 +1166,6 @@
             }
         }
 
-        .trade-now-btn.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
         .trade-now-btn::before {
             content: '';
             position: absolute;
@@ -2084,10 +2079,12 @@
             }
             
             .trade-now-btn {
+                position: fixed;
                 bottom: 2rem;
                 left: 1.25rem;
                 padding: 0.75rem 1.5rem;
                 font-size: 0.7rem;
+                z-index: 1000;
             }
             
             .trade-now-btn svg {
@@ -2795,7 +2792,7 @@
                     <div class="contact-content">
                         <h2 class="contact-title">LET'S BUILD<br>ALPHA TOGETHER</h2>
                         <p class="contact-desc">Accredited investors and institutional allocators are invited to request our detailed performance materials and strategy documentation.</p>
-                        <a href="mailto:invest@mx1.capital" class="contact-email">invest@mx1.capital</a>
+                        <a href="/cdn-cgi/l/email-protection#cda4a3bba8beb98da0b5fce3aeacbda4b9aca1" class="contact-email"><span class="__cf_email__" data-cfemail="036a6d75667077436e7b322d6062736a77626f">[email&#160;protected]</span></a>
                     </div>
                     <div class="footer-content">
                         <div>MX1 CAPITAL © 2024</div>
@@ -2811,7 +2808,7 @@
         </div>
     </div>
 
-    <script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         const world = document.getElementById('world');
         const progressBar = document.getElementById('progressBar');
         const directionHint = document.getElementById('directionHint');
@@ -3315,13 +3312,4 @@
             currentSlide = index;
         }
         
-        setInterval(() => showSlide((currentSlide + 1) % platformImages.length), 4000);
-        carouselDots.forEach((dot, i) => dot.addEventListener('click', (e) => {
-            e.stopPropagation();
-            showSlide(i);
-        }));
-        
-        updateWorld();
-    </script>
-</body>
-</html>
+        setInterval(() => showSlide((currentSlide + 1) % plat
