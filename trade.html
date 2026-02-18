@@ -313,14 +313,36 @@
         const muteBtn = document.getElementById('muteBtn');
         const tradeForm = document.getElementById('tradeForm');
         
-        // Auto-unmute after a short delay (user came from main site, so interaction happened)
-        setTimeout(() => {
+        // Try to unmute - if it fails, wait for user interaction
+        function tryUnmute() {
             tradeVideo.muted = false;
+            tradeVideo.play().then(() => {
+                muteBtn.classList.remove('muted');
+            }).catch(() => {
+                // Autoplay with sound blocked, keep muted
+                tradeVideo.muted = true;
+                muteBtn.classList.add('muted');
+            });
+        }
+        
+        // Try after short delay
+        setTimeout(tryUnmute, 500);
+        
+        // Also try on first touch/click anywhere
+        function enableAudioOnInteraction() {
+            tradeVideo.muted = false;
+            tradeVideo.play();
             muteBtn.classList.remove('muted');
-        }, 500);
+            document.removeEventListener('touchstart', enableAudioOnInteraction);
+            document.removeEventListener('click', enableAudioOnInteraction);
+        }
+        
+        document.addEventListener('touchstart', enableAudioOnInteraction, { once: true });
+        document.addEventListener('click', enableAudioOnInteraction, { once: true });
         
         // Mute button toggle
-        muteBtn.addEventListener('click', () => {
+        muteBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
             const isMuted = muteBtn.classList.toggle('muted');
             tradeVideo.muted = isMuted;
         });
