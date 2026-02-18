@@ -3222,6 +3222,21 @@
         }
         checkAudioSections();
         
+        // Make sure trade button click works
+        const tradeBtnEl = document.getElementById('tradeNowBtn');
+        if (tradeBtnEl) {
+            tradeBtnEl.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                window.location.href = 'trade.html';
+            });
+            tradeBtnEl.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                window.location.href = 'trade.html';
+            });
+        }
+        
         function startAnimation() {
             if (!isAnimating) {
                 isAnimating = true;
