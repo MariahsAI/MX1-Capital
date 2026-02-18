@@ -2808,7 +2808,7 @@
         </div>
     </div>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    <script>
         const world = document.getElementById('world');
         const progressBar = document.getElementById('progressBar');
         const directionHint = document.getElementById('directionHint');
@@ -3127,12 +3127,18 @@
         const splashScreen = document.getElementById('splashScreen');
         const splashEnter = document.getElementById('splashEnter');
         
-        splashEnter.addEventListener('click', () => {
+        function enterSite() {
             // Hide splash
             splashScreen.classList.add('hidden');
             
             // Mark that user has interacted (audio can now be enabled)
             userHasInteracted = true;
+        }
+        
+        splashEnter.addEventListener('click', enterSite);
+        splashEnter.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            enterSite();
         });
         
         muteBtn.addEventListener('click', () => {
