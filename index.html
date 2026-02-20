@@ -2517,6 +2517,10 @@
                             <source src="fusion-bg.mp4" type="video/mp4">
                         </video>
                     </div>
+                    <!-- Hero Audio -->
+                    <audio id="heroAudio" loop>
+                        <source src="hero-audio.mp3" type="audio/mpeg">
+                    </audio>
                     <div class="hero-overlay"></div>
                     
                     <div class="hero-logo">MX<span class="logo-1">1</span></div>
@@ -3154,6 +3158,13 @@
             
             // Mark that user has interacted (audio can now be enabled)
             userHasInteracted = true;
+            
+            // Start hero audio since we're on slide 1
+            const heroAudio = document.getElementById('heroAudio');
+            if (heroAudio) {
+                heroAudio.play().catch(err => console.log('Hero audio play error:', err));
+                muteBtn.classList.remove('muted');
+            }
         }
         
         splashEnter.addEventListener('click', enterSite);
@@ -3167,10 +3178,20 @@
             allVideos.forEach(video => {
                 video.muted = isMuted;
             });
+            // Also control hero audio
+            const heroAudio = document.getElementById('heroAudio');
+            if (heroAudio) {
+                if (isMuted) {
+                    heroAudio.pause();
+                } else {
+                    heroAudio.play().catch(err => console.log('Hero audio error:', err));
+                }
+            }
         });
         
         // Watch for entering/leaving audio sections
         let lastAudioPanel = -1;
+        const heroAudio = document.getElementById('heroAudio');
         
         function checkAudioSections() {
             const currentPanel = Math.round(currentScroll / scrollPerSegment);
@@ -3178,7 +3199,10 @@
             // Only trigger when panel actually changes
             if (currentPanel !== lastAudioPanel) {
                 
-                // Leaving previous panel - mute/pause its video
+                // Leaving previous panel - mute/pause its video/audio
+                if (lastAudioPanel === 0 && heroAudio) {
+                    heroAudio.pause();
+                }
                 if (lastAudioPanel === 1 && aboutVid) {
                     aboutVid.pause();
                     aboutVid.muted = true;
@@ -3188,8 +3212,15 @@
                     strategyVideo.muted = true;
                 }
                 
-                // Entering new panel - play/unmute its video
-                if (currentPanel === 1) {
+                // Entering new panel - play/unmute its video/audio
+                if (currentPanel === 0) {
+                    // Hero slide - play audio
+                    if (heroAudio && userHasInteracted) {
+                        heroAudio.currentTime = 0;
+                        heroAudio.play().catch(err => console.log('Hero audio play error:', err));
+                        muteBtn.classList.remove('muted');
+                    }
+                } else if (currentPanel === 1) {
                     if (aboutVid) {
                         aboutVid.currentTime = 0;
                         aboutVid.play().catch(err => console.log('About video play error:', err));
